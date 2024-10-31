@@ -13,7 +13,7 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
 @Mapper(componentModel = SPRING)
-public interface ProductMapper {
+public interface ProductDtoMapper {
 
     List<ProductDto> toDto(List<Product> products);
 

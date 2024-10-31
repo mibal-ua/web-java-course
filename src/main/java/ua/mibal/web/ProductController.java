@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.mibal.service.ProductService;
 import ua.mibal.service.model.ProductForm;
 import ua.mibal.web.dto.ProductDto;
-import ua.mibal.web.mapper.ProductMapper;
+import ua.mibal.web.mapper.ProductDtoMapper;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/v1/api/products")
 public class ProductController {
     private final ProductService service;
-    private final ProductMapper mapper;
+    private final ProductDtoMapper mapper;
 
     @GetMapping
     public List<ProductDto> getAll() {
