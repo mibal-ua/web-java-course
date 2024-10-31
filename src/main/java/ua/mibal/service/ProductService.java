@@ -2,6 +2,7 @@ package ua.mibal.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.mibal.domain.Product;
 import ua.mibal.repository.ProductRepository;
 import ua.mibal.service.exception.EntityNotFoundException;
@@ -9,6 +10,7 @@ import ua.mibal.service.mapper.ProductMapper;
 import ua.mibal.service.model.ProductForm;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Mykhailo Balakhon
@@ -33,9 +35,16 @@ public class ProductService {
         return repository.save(mapper.toEntity(product));
     }
 
-    public Product update(Long id, ProductForm product) {
-        //todo
-        return null;
+    @Transactional
+    public Product update(Long id, ProductForm form) {
+        Optional<Product> optionalProduct = repository.findById(id);
+        if (optionalProduct.isEmpty()) {
+            Product product = mapper.toEntity(id, form);
+            return repository.save(product);
+        }
+        Product product = optionalProduct.get();
+        mapper.update(product, form);
+        return product;
     }
 
     public void deleteById(Long id) {
