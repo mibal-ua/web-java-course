@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ua.mibal.domain.Product;
+import ua.mibal.domain.UpdateResult;
 import ua.mibal.service.ProductService;
 import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.ProductNotFoundException;
@@ -26,8 +27,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ua.mibal.domain.UpdateResult.Type.CREATED;
+import static ua.mibal.domain.UpdateResult.Type.UPDATED;
 
 /**
  * @author Mykhailo Balakhon
@@ -41,7 +45,7 @@ class ProductControllerTest extends ControllerTest {
     private ObjectMapper mapper;
 
     @BeforeEach
-    void setUp() {
+    void cleanUpMocks() {
         reset(productService);
     }
 
@@ -139,7 +143,91 @@ class ProductControllerTest extends ControllerTest {
     }
 
     @Test
-    void update() {
+    void update_existingShouldReturnOk() throws Exception {
+        ProductForm brandNewSpaceMilk = ProductForm.builder()
+                .name("Brand new Space milk")
+                .description("Brand new Milk from the space cow")
+                .price(valueOf(200))
+                .build();
+        when(productService.update(101L, brandNewSpaceMilk))
+                .thenReturn(new UpdateResult<>(
+                        Product.builder()
+                                .id(101L)
+                                .name("Brand new Space milk")
+                                .description("Brand new Milk from the space cow")
+                                .price(valueOf(200))
+                                .build(),
+                        UPDATED
+                ));
+
+        mvc.perform(put("/v1/api/products/101")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(brandNewSpaceMilk)))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""  
+                        {
+                          "name": "Brand new Space milk",
+                          "description": "Brand new Milk from the space cow",
+                          "price": 200
+                        }
+                        """, true));
+    }
+
+    @Test
+    void update_nonExistingShouldReturnCreated() throws Exception {
+        ProductForm brandNewSpaceMilk = ProductForm.builder()
+                .name("Brand new Space milk")
+                .description("Brand new Milk from the space cow")
+                .price(valueOf(200))
+                .build();
+        when(productService.update(101L, brandNewSpaceMilk))
+                .thenReturn(new UpdateResult<>(
+                        Product.builder()
+                                .id(101L)
+                                .name("Brand new Space milk")
+                                .description("Brand new Milk from the space cow")
+                                .price(valueOf(200))
+                                .build(),
+                        CREATED
+                ));
+
+        mvc.perform(put("/v1/api/products/101")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(brandNewSpaceMilk)))
+                .andExpect(status().isCreated())
+                .andExpect(content().json("""  
+                        {
+                          "name": "Brand new Space milk",
+                          "description": "Brand new Milk from the space cow",
+                          "price": 200
+                        }
+                        """, true));
+    }
+
+    @ParameterizedTest
+    @MethodSource("ua.mibal.web.ProductControllerTest#invalidProductForms")
+    void update_shouldReturnBadRequestOnInvalidFormAnyway(ProductForm form) throws Exception {
+        update_shouldReturnBadRequestOnInvalidFormIfExists(form);
+        cleanUpMocks();
+        update_shouldReturnBadRequestOnInvalidFormIfNotExists(form);
+    }
+
+    void update_shouldReturnBadRequestOnInvalidFormIfExists(ProductForm form) throws Exception {
+        given(Product.builder().id(101L).build());
+
+        mvc.perform(put("/v1/api/products/101")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(form)))
+                .andExpect(status().isBadRequest());
+    }
+
+    void update_shouldReturnBadRequestOnInvalidFormIfNotExists(ProductForm form) throws Exception {
+        givenEmptyService();
+
+        mvc.perform(put("/v1/api/products/101")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(form)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
