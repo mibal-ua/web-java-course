@@ -4,13 +4,24 @@ package ua.mibal.service.exception;
  * @author Mykhailo Balakhon
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
-public class EntityNotFoundException extends RuntimeException {
+public abstract class EntityNotFoundException extends RuntimeException {
+    private final Class<?> entityClass;
 
-    public EntityNotFoundException(String message) {
-        super(message);
+    protected EntityNotFoundException(Class<?> entityClass) {
+        super(entityClass.getSimpleName() + " not found");
+        this.entityClass = entityClass;
     }
 
-    public EntityNotFoundException(String message, Throwable throwable) {
-        super(message, throwable);
+    @Override
+    public String getMessage() {
+        return entityClass.getSimpleName() + " not found";
+    }
+
+    public String getType() {
+        return entityClass.getSimpleName().toLowerCase() + "-not-found";
+    }
+
+    public String getTitle() {
+        return getMessage();
     }
 }
