@@ -110,9 +110,46 @@ class ProductServiceTest {
         assertThat(actual.getPrice()).isEqualTo(100.0);
     }
 
-    //todo
     @Test
-    void update() {
+    void update_shouldUpdateOnExisting() {
+        given(Product.builder()
+                .id(1L)
+                .name("Product 1")
+                .description("Description 1")
+                .price(100.0)
+                .build());
+        ProductForm form = ProductForm.builder()
+                .name("Product 2")
+                .description("Description 2")
+                .price(200.0)
+                .build();
+
+        service.update(1L, form);
+        
+        Product actual = repository.findById(1L).get();
+        assertThat(actual.getName()).isEqualTo("Product 2");
+        assertThat(actual.getDescription()).isEqualTo("Description 2");
+        assertThat(actual.getPrice()).isEqualTo(200.0);
+    }
+
+    @Test
+    void update_shouldCreateOnNew() {
+        givenEmptyRepository();
+        ProductForm form = ProductForm.builder()
+                .name("Product 2")
+                .description("Description 2")
+                .price(200.0)
+                .build();
+
+        service.update(1L, form);
+        
+        verify(repository)
+                .save(productArg.capture());
+
+        Product actual = productArg.getValue();
+        assertThat(actual.getName()).isEqualTo("Product 2");
+        assertThat(actual.getDescription()).isEqualTo("Description 2");
+        assertThat(actual.getPrice()).isEqualTo(200.0);
     }
 
     @Test
