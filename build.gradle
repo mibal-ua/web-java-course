@@ -17,6 +17,7 @@ java {
 ext {
     // Minimal Coverage
     minimumCoveragePerFile = 0.8
+    filesExcludedFromCoverage =[ "**/config/*Configuration.*" ]
 }
 
 configurations {
