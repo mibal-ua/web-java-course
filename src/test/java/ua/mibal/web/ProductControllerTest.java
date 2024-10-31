@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ua.mibal.domain.Product;
 import ua.mibal.service.ProductService;
+import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.model.ProductForm;
 
@@ -110,12 +111,7 @@ class ProductControllerTest extends ControllerTest {
 
     @Test
     void create_shouldReturnConflictIfNameIsNotUnique() throws Exception {
-        given(Product.builder()
-                .id(101L)
-                .name("Same name")
-                .description("Milk from the space cow")
-                .price(valueOf(100))
-                .build());
+        givenServiceThatThrowsConflictExceptionOnName("Same name");
 
         mvc.perform(post("/v1/api/products")
                         .contentType(APPLICATION_JSON)
@@ -168,6 +164,25 @@ class ProductControllerTest extends ControllerTest {
                 .name("Valid name")
                 .description("Valid description")
                 .price(valueOf(100));
+    }
+
+    private void givenServiceThatThrowsConflictExceptionOnName(String name) {
+        when(productService.create(any()))
+                .thenAnswer(invocation -> {
+                    ProductForm form = invocation.getArgument(0);
+                    if (name.equals(form.name())) {
+                        throw new ConflictException("");
+                    }
+                    return null;
+                });
+        when(productService.update(any(), any()))
+                .thenAnswer(invocation -> {
+                    ProductForm form = invocation.getArgument(1);
+                    if (name.equals(form.name())) {
+                        throw new ConflictException("");
+                    }
+                    return null;
+                });
     }
 
     private void givenEmptyService() {
