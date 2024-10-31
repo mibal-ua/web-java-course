@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ua.mibal.service.ProductService;
+import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.model.ProductForm;
 import ua.mibal.web.dto.ProductDto;
 import ua.mibal.web.mapper.ProductDtoMapper;
@@ -19,6 +20,7 @@ import ua.mibal.web.mapper.ProductDtoMapper;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 /**
  * @author Mykhailo Balakhon
@@ -64,7 +66,11 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        service.deleteById(id);
+        try {
+            service.deleteById(id);
+        } catch (ProductNotFoundException e) {
+        }
     }
 }
