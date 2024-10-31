@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.mibal.domain.Product;
 import ua.mibal.repository.ProductRepository;
+import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.mapper.ProductMapper;
 import ua.mibal.service.model.ProductForm;
@@ -32,11 +33,13 @@ public class ProductService {
     }
 
     public Product create(ProductForm product) {
+        validateUnique(product.name());
         return repository.save(mapper.toEntity(product));
     }
 
     @Transactional
     public Product update(Long id, ProductForm form) {
+        validateUnique(form.name());
         Optional<Product> optionalProduct = repository.findById(id);
         if (optionalProduct.isEmpty()) {
             Product product = mapper.toEntity(id, form);
@@ -49,5 +52,11 @@ public class ProductService {
 
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    private void validateUnique(String name) {
+        if (repository.existsByName(name)) {
+            throw new ConflictException("Product with name " + name + " already exists");
+        }
     }
 }
