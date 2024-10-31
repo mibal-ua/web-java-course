@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ua.mibal.domain.Product;
 import ua.mibal.service.ProductService;
 import ua.mibal.service.exception.ConflictException;
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 
 import static java.math.BigDecimal.valueOf;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -141,7 +143,24 @@ class ProductControllerTest extends ControllerTest {
     }
 
     @Test
-    void delete() {
+    void delete() throws Exception {
+        given(Product.builder()
+                .id(101L)
+                .name("Space milk")
+                .description("Milk from the space cow")
+                .price(valueOf(100))
+                .build());
+
+        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/101"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void delete_shouldNotThrowExceptionEvenIfNotFound() throws Exception {
+        givenEmptyService();
+
+        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/101"))
+                .andExpect(status().isNoContent());
     }
 
     private static Stream<ProductForm> invalidProductForms() {
@@ -190,6 +209,9 @@ class ProductControllerTest extends ControllerTest {
                 .thenReturn(List.of());
         when(productService.getOneById(any()))
                 .thenThrow(new ProductNotFoundException());
+        doThrow(new ProductNotFoundException())
+                .when(productService)
+                .deleteById(any());
     }
 
     private void given(Product... products) {
