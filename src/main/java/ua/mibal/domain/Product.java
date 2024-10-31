@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * @author Mykhailo Balakhon
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
@@ -31,5 +33,5 @@ public class Product {
     private String name;
     private String description;
     @Column(nullable = false)
-    private Double price;
+    private BigDecimal price;
 }

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.mibal.domain.Product;
 import ua.mibal.repository.ProductRepository;
-import ua.mibal.service.exception.EntityNotFoundException;
+import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.mapper.ProductMapper;
 import ua.mibal.service.model.ProductForm;
 
@@ -28,7 +28,7 @@ public class ProductService {
 
     public Product getOneById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     public Product create(ProductForm product) {

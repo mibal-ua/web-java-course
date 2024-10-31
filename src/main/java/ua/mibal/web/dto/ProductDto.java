@@ -5,6 +5,8 @@ package ua.mibal.web.dto;
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
 public record ProductDto(
-        
+        String name,
+        String description,
+        Double price
 ) {
 }

@@ -13,6 +13,7 @@ import ua.mibal.test.annotation.UnitTest;
 import java.util.List;
 import java.util.Optional;
 
+import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,7 +41,7 @@ class ProductServiceTest {
                 .id(1L)
                 .name("Product 1")
                 .description("Description 1")
-                .price(100.0)
+                .price(valueOf(100))
                 .build());
 
         List<Product> actual = service.getAll();
@@ -51,7 +52,7 @@ class ProductServiceTest {
         assertThat(actualProduct.getId()).isEqualTo(1L);
         assertThat(actualProduct.getName()).isEqualTo("Product 1");
         assertThat(actualProduct.getDescription()).isEqualTo("Description 1");
-        assertThat(actualProduct.getPrice()).isEqualTo(100.0);
+        assertThat(actualProduct.getPrice()).isEqualTo(valueOf(100));
     }
 
     @Test
@@ -69,7 +70,7 @@ class ProductServiceTest {
                 .id(1L)
                 .name("Product 1")
                 .description("Description 1")
-                .price(100.0)
+                .price(valueOf(100))
                 .build());
 
         Product actual = service.getOneById(1L);
@@ -77,7 +78,7 @@ class ProductServiceTest {
         assertThat(actual.getId()).isEqualTo(1L);
         assertThat(actual.getName()).isEqualTo("Product 1");
         assertThat(actual.getDescription()).isEqualTo("Description 1");
-        assertThat(actual.getPrice()).isEqualTo(100.0);
+        assertThat(actual.getPrice()).isEqualTo(valueOf(100));
     }
 
     @Test
@@ -96,7 +97,7 @@ class ProductServiceTest {
         ProductForm form = ProductForm.builder()
                 .name("Product 1")
                 .description("Description 1")
-                .price(100.0)
+                .price(valueOf(100))
                 .build();
         
         service.create(form);
@@ -107,7 +108,7 @@ class ProductServiceTest {
 
         assertThat(actual.getName()).isEqualTo("Product 1");
         assertThat(actual.getDescription()).isEqualTo("Description 1");
-        assertThat(actual.getPrice()).isEqualTo(100.0);
+        assertThat(actual.getPrice()).isEqualTo(valueOf(100));
     }
 
     @Test
@@ -116,12 +117,12 @@ class ProductServiceTest {
                 .id(1L)
                 .name("Product 1")
                 .description("Description 1")
-                .price(100.0)
+                .price(valueOf(100))
                 .build());
         ProductForm form = ProductForm.builder()
                 .name("Product 2")
                 .description("Description 2")
-                .price(200.0)
+                .price(valueOf(200))
                 .build();
 
         service.update(1L, form);
@@ -129,7 +130,7 @@ class ProductServiceTest {
         Product actual = repository.findById(1L).get();
         assertThat(actual.getName()).isEqualTo("Product 2");
         assertThat(actual.getDescription()).isEqualTo("Description 2");
-        assertThat(actual.getPrice()).isEqualTo(200.0);
+        assertThat(actual.getPrice()).isEqualTo(valueOf(200));
     }
 
     @Test
@@ -138,7 +139,7 @@ class ProductServiceTest {
         ProductForm form = ProductForm.builder()
                 .name("Product 2")
                 .description("Description 2")
-                .price(200.0)
+                .price(valueOf(200))
                 .build();
 
         service.update(1L, form);
@@ -149,7 +150,7 @@ class ProductServiceTest {
         Product actual = productArg.getValue();
         assertThat(actual.getName()).isEqualTo("Product 2");
         assertThat(actual.getDescription()).isEqualTo("Description 2");
-        assertThat(actual.getPrice()).isEqualTo(200.0);
+        assertThat(actual.getPrice()).isEqualTo(valueOf(200));
     }
 
     @Test
@@ -158,7 +159,7 @@ class ProductServiceTest {
                 .id(1L)
                 .name("Product 1")
                 .description("Description 1")
-                .price(100.0)
+                .price(valueOf(100))
                 .build());
         
         assertDoesNotThrow(
