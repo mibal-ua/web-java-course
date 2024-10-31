@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: web-java-course
+  datasource:
+    url:
+    username:
+    password:
