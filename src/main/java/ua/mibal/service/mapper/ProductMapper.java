@@ -24,4 +24,6 @@ public interface ProductMapper {
     Product toEntity(Long id, ProductForm form);
 
     void update(@MappingTarget Product product, ProductForm form);
+
+    ProductForm toForm(Product product);
 }

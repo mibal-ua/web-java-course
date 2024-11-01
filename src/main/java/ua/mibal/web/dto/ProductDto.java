@@ -1,6 +1,7 @@
 package ua.mibal.web.dto;
 
 import lombok.Builder;
+import ua.mibal.domain.Category;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,7 @@ public record ProductDto(
         Long id,
         String name,
         String description,
-        BigDecimal price
+        BigDecimal price,
+        Category category
 ) {
 }
