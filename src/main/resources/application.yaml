@@ -9,3 +9,7 @@ spring:
     password:
   jpa:
     hibernate.ddl-auto: update
+
+application:
+  restclient:
+    response-timeout: 1000
