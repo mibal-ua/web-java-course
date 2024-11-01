@@ -1,4 +1,4 @@
-package ua.mibal.repository.impl;
+package ua.mibal.repository.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ua.mibal.domain.Product;
