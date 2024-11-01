@@ -10,5 +10,5 @@ import ua.mibal.repository.web.config.props.WebServiceProductRepositoryProps;
  */
 @EnableConfigurationProperties(WebServiceProductRepositoryProps.class)
 @Configuration
-public class WebServiceProductRepositoryConfig {
+public class WebServiceProductRepositoryConfiguration {
 }
