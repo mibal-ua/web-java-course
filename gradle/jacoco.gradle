@@ -64,16 +64,16 @@ tasks.register('jacocoIntegrationTestReport', JacocoReport) {
 
 test {
     filter {
-        excludeTestsMatching '*IT'
+        excludeTestsMatching '*IntegrationTest'
     }
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
 
 integrationTest {
     maxParallelForks = 4
-//    filter {
-//        includeTestsMatching '*IT'
-//    }
+    filter {
+        includeTestsMatching '*IntegrationTest'
+    }
     finalizedBy tasks.jacocoIntegrationTestReport // report is always generated after tests run
 }
 
