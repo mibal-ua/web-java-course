@@ -3,7 +3,7 @@ info:
   title: WEB Java course API documentation
   version: 0.0.1-SNAPSHOT
 servers:
-- url: http://localhost:8080
+- url: http://localhost:7070
   description: Local server
 paths:
   /v1/api/products/{id}:
@@ -51,12 +51,6 @@ paths:
               $ref: "#/components/schemas/ProductForm"
         required: true
       responses:
-        "400":
-          description: Passed form to update is not valid
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ConstraintViolationProblemDetails"
         "200":
           description: Product updated
           content:
@@ -69,6 +63,12 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ProductDto"
+        "400":
+          description: Passed form to update is not valid
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ConstraintViolationProblemDetails"
     delete:
       tags:
       - product-controller
@@ -117,23 +117,24 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ProblemDetail"
-        "201":
-          description: Product created
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ProductDto"
         "400":
           description: Passed form to create is not valid
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ConstraintViolationProblemDetails"
+        "201":
+          description: Product created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDto"
 components:
   schemas:
     ProductForm:
       required:
       - name
+      - price
       type: object
       properties:
         name:
