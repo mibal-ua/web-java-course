@@ -18,7 +18,12 @@ java {
 ext {
     // Minimal Coverage
     minimumCoveragePerFile = 0.8
-    filesExcludedFromCoverage =[ "**/config/*Configuration.*" ]
+    filesExcludedFromCoverage = [
+            "**/config/*Configuration.*",
+            "**/Application.java", // Launcher
+            "**/mapper/*",
+            "**/web/dto/*", "**/service/model/*", // DTOs
+    ]
 }
 
 configurations {
