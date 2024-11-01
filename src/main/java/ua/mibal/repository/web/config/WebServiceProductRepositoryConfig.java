@@ -1,8 +1,8 @@
-package ua.mibal.repository.impl.web.config;
+package ua.mibal.repository.web.config;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import ua.mibal.repository.impl.web.config.props.WebServiceProductRepositoryProps;
+import ua.mibal.repository.web.config.props.WebServiceProductRepositoryProps;
 
 /**
  * @author Mykhailo Balakhon
