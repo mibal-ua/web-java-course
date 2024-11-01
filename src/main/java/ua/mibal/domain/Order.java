@@ -13,8 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 import static jakarta.persistence.FetchType.LAZY;
 
 /**
@@ -28,22 +26,17 @@ import static jakarta.persistence.FetchType.LAZY;
 @Builder
 
 @Entity
-@Table(name = "product")
-public class Product {
+@Table(name = "order")
+public class Order {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
-
-    private String description;
+    @ManyToOne(fetch = LAZY, optional = false)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column(nullable = false)
-    private BigDecimal price;
-
-    @ManyToOne(optional = false, fetch = LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private int quantity;
 }
