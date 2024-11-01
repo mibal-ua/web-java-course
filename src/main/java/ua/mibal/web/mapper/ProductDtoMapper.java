@@ -1,6 +1,7 @@
 package ua.mibal.web.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import ua.mibal.domain.Product;
 import ua.mibal.web.dto.ProductDto;
 
@@ -14,6 +15,10 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
  */
 @Mapper(componentModel = SPRING)
 public interface ProductDtoMapper {
+
+    static ProductDtoMapper getInstance() {
+        return Mappers.getMapper(ProductDtoMapper.class);
+    }
 
     List<ProductDto> toDto(List<Product> products);
 
