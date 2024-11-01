@@ -2,7 +2,6 @@ package ua.mibal.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ua.mibal.domain.Product;
 import ua.mibal.domain.UpdateResult;
 import ua.mibal.repository.ProductRepository;
@@ -41,7 +40,6 @@ public class ProductService {
         return repository.save(mapper.toEntity(product));
     }
 
-    @Transactional
     public UpdateResult<Product> update(Long id, ProductForm form) {
         validateUnique(form.name());
         Optional<Product> optionalProduct = repository.findById(id);
@@ -54,6 +52,7 @@ public class ProductService {
         }
         Product product = optionalProduct.get();
         mapper.update(product, form);
+        repository.save(product);
         return new UpdateResult<>(
                 product,
                 UPDATED
