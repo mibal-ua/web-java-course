@@ -1,12 +1,5 @@
 package ua.mibal.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
-
-import static jakarta.persistence.FetchType.LAZY;
 
 /**
  * @author Mykhailo Balakhon
@@ -27,21 +18,21 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @Builder
 
-@Entity
-@Table(name = "\"order\"")
+//@Entity
+//@Table(name = "\"order\"")
 public class Order {
 
-    @Id
-    @GeneratedValue
+    //    @Id
+//    @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = LAZY, optional = false)
-    @JoinColumn(name = "product_id")
+    //    @ManyToOne(fetch = LAZY, optional = false)
+//    @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(nullable = false)
+    //    @Column(nullable = false)
     private int quantity;
-    
-    @Column(nullable = false)
+
+    //    @Column(nullable = false)
     private Date timestamp;
 }
