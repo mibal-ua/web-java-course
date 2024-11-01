@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ua.mibal.domain.Category;
 import ua.mibal.domain.Product;
 import ua.mibal.domain.UpdateResult;
 import ua.mibal.service.ProductService;
@@ -56,6 +57,7 @@ class ProductControllerTest extends ControllerTest {
                 .name("Space milk")
                 .description("Milk from the space cow")
                 .price(valueOf(100))
+                .category(galaxyFood())
                 .build());
 
         mvc.perform(get("/v1/api/products"))
@@ -63,9 +65,14 @@ class ProductControllerTest extends ControllerTest {
                 .andExpect(content().json("""
                         [
                           {
+                            "id": 101,
                             "name": "Space milk",
                             "description": "Milk from the space cow",
-                            "price": 100
+                            "price": 100,
+                            "category": {
+                              "id": 1,
+                              "name": "Galaxy food"
+                            }
                           }
                         ]
                         """, true));
@@ -78,15 +85,21 @@ class ProductControllerTest extends ControllerTest {
                 .name("Space milk")
                 .description("Milk from the space cow")
                 .price(valueOf(100))
+                .category(galaxyFood())
                 .build());
 
         mvc.perform(get("/v1/api/products/101"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""  
                         {
+                          "id": 101,
                           "name": "Space milk",
                           "description": "Milk from the space cow",
-                          "price": 100
+                          "price": 100,
+                            "category": {
+                              "id": 1,
+                              "name": "Galaxy food"
+                            }
                         }
                         """, true));
     }
@@ -156,6 +169,7 @@ class ProductControllerTest extends ControllerTest {
                                 .name("Brand new Space milk")
                                 .description("Brand new Milk from the space cow")
                                 .price(valueOf(200))
+                                .category(galaxyFood())
                                 .build(),
                         UPDATED
                 ));
@@ -166,9 +180,14 @@ class ProductControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("""  
                         {
+                          "id": 101,
                           "name": "Brand new Space milk",
                           "description": "Brand new Milk from the space cow",
-                          "price": 200
+                          "price": 200,
+                          "category": {
+                            "id": 1,
+                            "name": "Galaxy food"
+                          }
                         }
                         """, true));
     }
@@ -187,6 +206,7 @@ class ProductControllerTest extends ControllerTest {
                                 .name("Brand new Space milk")
                                 .description("Brand new Milk from the space cow")
                                 .price(valueOf(200))
+                                .category(galaxyFood())
                                 .build(),
                         CREATED
                 ));
@@ -197,9 +217,14 @@ class ProductControllerTest extends ControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().json("""  
                         {
+                          "id": 101,
                           "name": "Brand new Space milk",
                           "description": "Brand new Milk from the space cow",
-                          "price": 200
+                          "price": 200,
+                            "category": {
+                              "id": 1,
+                              "name": "Galaxy food"
+                            }
                         }
                         """, true));
     }
@@ -314,5 +339,12 @@ class ProductControllerTest extends ControllerTest {
             when(productService.getOneById(product.getId()))
                     .thenReturn(product);
         }
+    }
+    
+    private static Category galaxyFood() {
+        return Category.builder()
+                .id(1L)
+                .name("Galaxy food")
+                .build();
     }
 }
