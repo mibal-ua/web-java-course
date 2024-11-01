@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import ua.mibal.service.model.validation.constraint.CosmicWord;
 
 import java.math.BigDecimal;
 
@@ -18,8 +19,10 @@ public record ProductForm(
 
         @NotBlank(message = "Name is mandatory")
         @Size(min = 5, message = "Name must be at least 5 characters long")
+        @CosmicWord
         String name,
 
+        @CosmicWord
         String description,
 
         @NotNull(message = "Price is mandatory")
