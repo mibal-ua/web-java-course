@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 import static jakarta.persistence.FetchType.LAZY;
 
 /**
@@ -39,4 +41,7 @@ public class Order {
 
     @Column(nullable = false)
     private int quantity;
+    
+    @Column(nullable = false)
+    private Date timestamp;
 }
