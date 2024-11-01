@@ -28,7 +28,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Builder
 
 @Entity
-@Table(name = "order")
+@Table(name = "\"order\"")
 public class Order {
 
     @Id
