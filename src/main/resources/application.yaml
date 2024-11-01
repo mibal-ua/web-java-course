@@ -1,0 +1,17 @@
+server:
+  port: 7070
+spring:
+  application:
+    name: web-java-course
+  datasource:
+    url:
+    username:
+    password:
+  jpa:
+    hibernate.ddl-auto: update
+
+application:
+  rest-client:
+    response-timeout: 1000
+  web-service-product-repository:
+    url: http://localhost:7071/v1/api/products
