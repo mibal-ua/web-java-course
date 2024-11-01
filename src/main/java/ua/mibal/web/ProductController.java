@@ -18,6 +18,7 @@ import ua.mibal.domain.UpdateResult;
 import ua.mibal.service.ProductService;
 import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.model.ProductForm;
+import ua.mibal.web.docs.ProductControllerDocumentation;
 import ua.mibal.web.dto.ProductDto;
 import ua.mibal.web.mapper.ProductDtoMapper;
 
@@ -32,7 +33,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/api/products")
-public class ProductController {
+public class ProductController implements ProductControllerDocumentation {
     private final ProductService service;
     private final ProductDtoMapper mapper;
 
