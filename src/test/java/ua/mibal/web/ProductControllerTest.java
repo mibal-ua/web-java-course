@@ -117,14 +117,14 @@ class ProductControllerTest extends ControllerTest {
 
     @Test
     void create_shouldReturnConflictIfNameIsNotUnique() throws Exception {
-        givenServiceThatThrowsConflictExceptionOnName("Same name");
+        givenServiceThatThrowsConflictExceptionOnName("Same space name");
 
         mvc.perform(post("/v1/api/products")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
-                                  "name": "Same name",
-                                  "description": "Another description",
+                                  "name": "Same space name",
+                                  "description": "Another space description",
                                   "price": 100
                                 }
                                 """))
@@ -258,6 +258,9 @@ class ProductControllerTest extends ControllerTest {
                 valid().name(""),
                 valid().name("litl"),
                 valid().name("         "),
+                valid().name("does not contain sp-ace words"),
+                // description
+                valid().description("does not contain sp-ace words"),
                 // price
                 valid().price(null),
                 valid().price(valueOf(-1)),
@@ -269,8 +272,8 @@ class ProductControllerTest extends ControllerTest {
 
     private static ProductForm.ProductFormBuilder valid() {
         return ProductForm.builder()
-                .name("Valid name")
-                .description("Valid description")
+                .name("Valid space name")
+                .description("Valid space description")
                 .price(valueOf(100));
     }
 
