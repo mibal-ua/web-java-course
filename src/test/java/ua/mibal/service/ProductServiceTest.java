@@ -5,6 +5,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import ua.mibal.domain.Product;
 import ua.mibal.repository.ProductRepository;
+import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.EntityNotFoundException;
 import ua.mibal.service.mapper.ProductMapper;
 import ua.mibal.service.model.ProductForm;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -112,6 +114,28 @@ class ProductServiceTest {
     }
 
     @Test
+    void create_shouldThrowIfNameIsNotUnique() {
+        given(Product.builder()
+                .name("Product 1")
+                .description("Description 1")
+                .price(valueOf(100))
+                .build());
+        
+        ProductForm form = ProductForm.builder()
+                .name("Product 1")
+                .description("Description 1")
+                .price(valueOf(100))
+                .build();
+
+        assertThrows(
+                ConflictException.class,
+                () -> service.create(form)
+        );
+
+        verify(repository, never()).save(any());
+    }
+
+    @Test
     void update_shouldUpdateOnExisting() {
         given(Product.builder()
                 .id(1L)
@@ -151,6 +175,29 @@ class ProductServiceTest {
         assertThat(actual.getName()).isEqualTo("Product 2");
         assertThat(actual.getDescription()).isEqualTo("Description 2");
         assertThat(actual.getPrice()).isEqualTo(valueOf(200));
+    }
+
+    @Test
+    void update_shouldThrowIfNameIsNotUnique() {
+        given(Product.builder()
+                .id(101L)
+                .name("Product 1")
+                .description("Description 1")
+                .price(valueOf(100))
+                .build());
+
+        ProductForm form = ProductForm.builder()
+                .name("Product 1")
+                .description("Description 1")
+                .price(valueOf(100))
+                .build();
+
+        assertThrows(
+                ConflictException.class,
+                () -> service.update(200L, form)
+        );
+
+        verify(repository, never()).save(any());
     }
 
     @Test
@@ -199,6 +246,8 @@ class ProductServiceTest {
         for (Product product : products) {
             when(repository.findById(product.getId()))
                     .thenReturn(Optional.of(product));
+            when(repository.existsByName(product.getName()))
+                    .thenReturn(true);
         }
     }
 }
