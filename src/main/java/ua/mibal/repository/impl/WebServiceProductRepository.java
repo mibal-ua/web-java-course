@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import ua.mibal.domain.Product;
 import ua.mibal.repository.ProductRepository;
+import ua.mibal.repository.impl.web.config.props.WebServiceProductRepositoryProps;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @Service
 public class WebServiceProductRepository implements ProductRepository {
     private final RestClient restClient;
+    private final WebServiceProductRepositoryProps props;
 
     @Override
     public boolean existsByName(String name) {
