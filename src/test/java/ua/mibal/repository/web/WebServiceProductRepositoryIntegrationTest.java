@@ -33,11 +33,7 @@ class WebServiceProductRepositoryIntegrationTest extends WireMockTest {
 
     @Test
     void existsByName() {
-        stubFor(WireMock.get("/v1/api/products/exists")
-                .withRequestBody(jsonRequest(
-                        ProductForm.builder()
-                                .name("Space milk")
-                                .build()))
+        stubFor(WireMock.get("/v1/api/products/exists?name=Space%20milk")
                 .willReturn(aResponse().withStatus(204)));
 
 
@@ -46,11 +42,7 @@ class WebServiceProductRepositoryIntegrationTest extends WireMockTest {
 
     @Test
     void existsByName_shouldReturnFalseIfNotFound() {
-        stubFor(WireMock.get("/v1/api/products/exists")
-                .withRequestBody(jsonRequest(
-                        ProductForm.builder()
-                                .name("Space milk")
-                                .build()))
+        stubFor(WireMock.get("/v1/api/products/exists?name=Space%20milk")
                 .willReturn(aResponse().withStatus(404)));
 
         assertThat(repository.existsByName("Space milk")).isFalse();
@@ -113,8 +105,8 @@ class WebServiceProductRepositoryIntegrationTest extends WireMockTest {
 
         assertThat(actual).hasSize(2);
         assertThat(actual.get(0).getId()).isEqualTo(101L);
-        assertThat(actual.get(0).getName()).isEqualTo("Space milk");
-        assertThat(actual.get(0).getDescription()).isEqualTo("Super duper Space milk");
+        assertThat(actual.get(0).getName()).isEqualTo("Space milk1");
+        assertThat(actual.get(0).getDescription()).isEqualTo("Super duper Space milk1");
         assertThat(actual.get(0).getPrice()).isEqualTo(valueOf(100));
     }
 
