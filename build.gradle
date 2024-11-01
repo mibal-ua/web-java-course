@@ -23,6 +23,7 @@ ext {
             "**/Application.java", // Launcher
             "**/mapper/*",
             "**/web/dto/*", "**/service/model/*", // DTOs
+            "**/*Exception.java",
     ]
 }
 
