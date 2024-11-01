@@ -1,4 +1,4 @@
-package ua.mibal.repository.impl;
+package ua.mibal.repository.web;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import ua.mibal.domain.Product;
 import ua.mibal.repository.ProductRepository;
-import ua.mibal.repository.impl.web.config.props.WebServiceProductRepositoryProps;
+import ua.mibal.repository.web.config.props.WebServiceProductRepositoryProps;
 
 import java.util.List;
 import java.util.Optional;

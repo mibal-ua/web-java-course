@@ -1,4 +1,4 @@
-package ua.mibal.repository.impl.web.config;
+package ua.mibal.repository.web.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
-import ua.mibal.repository.impl.web.config.props.RestClientProps;
+import ua.mibal.repository.web.config.props.RestClientProps;
 
 import java.time.Duration;
 
