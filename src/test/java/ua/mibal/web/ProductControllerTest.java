@@ -259,6 +259,7 @@ class ProductControllerTest extends ControllerTest {
                 valid().name("litl"),
                 valid().name("         "),
                 // price
+                valid().price(null),
                 valid().price(valueOf(-1)),
                 valid().price(valueOf(0)),
                 valid().price(valueOf(0.99)),
