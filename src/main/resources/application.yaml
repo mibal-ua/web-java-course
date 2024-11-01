@@ -13,3 +13,5 @@ spring:
 application:
   restclient:
     response-timeout: 1000
+  web-service-product-repository:
+    url: http://localhost:7071/v1/api/products
