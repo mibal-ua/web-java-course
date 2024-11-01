@@ -1,0 +1,4 @@
+openApi {
+    apiDocsUrl.set("http://localhost:7070/v3/api-docs")
+    outputDir.set(file("${rootProject.projectDir}/docs"))
+}
