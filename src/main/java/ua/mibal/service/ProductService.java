@@ -3,7 +3,6 @@ package ua.mibal.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.mibal.domain.Product;
-import ua.mibal.repository.ProductRepository;
 import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.mapper.ProductMapper;
@@ -19,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ProductService {
-    private final ProductRepository repository;
+    private final ProductStorageService repository;
     private final ProductMapper mapper;
 
     public List<Product> getAll() {

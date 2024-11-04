@@ -1,4 +1,4 @@
-package ua.mibal.repository.web;
+package ua.mibal.service.storage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClient;
 import ua.mibal.domain.Product;
-import ua.mibal.repository.ProductRepository;
-import ua.mibal.repository.web.config.props.WebServiceProductRepositoryProps;
-import ua.mibal.repository.web.exception.WebServiceProductRepositoryException;
+import ua.mibal.service.ProductStorageService;
 import ua.mibal.service.mapper.ProductMapper;
+import ua.mibal.service.storage.config.props.WebServiceProductRepositoryProps;
+import ua.mibal.service.storage.exception.WebServiceProductRepositoryException;
 import ua.mibal.web.dto.ProductDto;
 import ua.mibal.web.mapper.ProductDtoMapper;
 
@@ -31,7 +31,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Primary
 @Service
-public class WebServiceProductRepository implements ProductRepository {
+public class WebProductStorageService implements ProductStorageService {
     private final RestClient restClient;
     private final WebServiceProductRepositoryProps props;
     private final ProductDtoMapper productDtoMapper;

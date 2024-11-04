@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import ua.mibal.domain.Product;
-import ua.mibal.repository.ProductRepository;
 import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.NotFoundException;
 import ua.mibal.service.mapper.ProductMapper;
@@ -31,7 +30,7 @@ import static org.mockito.Mockito.when;
  */
 @UnitTest
 class ProductServiceTest {
-    private final ProductRepository repository = mock();
+    private final ProductStorageService repository = mock();
     private final ProductService service = new ProductService(repository, ProductMapper.getInstance());
     
     @Captor

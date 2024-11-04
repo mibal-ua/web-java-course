@@ -1,4 +1,4 @@
-package ua.mibal.repository.web.exception;
+package ua.mibal.service.storage.exception;
 
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpResponse;

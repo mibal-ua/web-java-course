@@ -1,4 +1,4 @@
-package ua.mibal.repository.web;
+package ua.mibal.service.storage;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;

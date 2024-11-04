@@ -1,4 +1,4 @@
-package ua.mibal.repository.web;
+package ua.mibal.service.storage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,9 +27,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  * @author Mykhailo Balakhon
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
-class WebServiceProductRepositoryIntegrationTest extends WireMockTest {
+class WebProductStorageServiceIntegrationTest extends WireMockTest {
     @Autowired
-    private WebServiceProductRepository repository;
+    private WebProductStorageService repository;
 
     @Test
     void existsByName() {

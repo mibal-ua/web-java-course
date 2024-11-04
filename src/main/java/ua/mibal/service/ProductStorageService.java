@@ -1,4 +1,4 @@
-package ua.mibal.repository;
+package ua.mibal.service;
 
 import ua.mibal.domain.Product;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
  * @author Mykhailo Balakhon
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
-public interface ProductRepository {
+public interface ProductStorageService {
 
     boolean existsByName(String name);
 
