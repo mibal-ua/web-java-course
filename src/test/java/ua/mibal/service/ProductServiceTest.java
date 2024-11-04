@@ -6,7 +6,7 @@ import org.mockito.Captor;
 import ua.mibal.domain.Product;
 import ua.mibal.repository.ProductRepository;
 import ua.mibal.service.exception.ConflictException;
-import ua.mibal.service.exception.EntityNotFoundException;
+import ua.mibal.service.exception.NotFoundException;
 import ua.mibal.service.mapper.ProductMapper;
 import ua.mibal.service.model.ProductForm;
 import ua.mibal.test.annotation.UnitTest;
@@ -88,7 +88,7 @@ class ProductServiceTest {
         givenEmptyRepository();
 
         assertThrows(
-                EntityNotFoundException.class,
+                NotFoundException.class,
                 () -> service.getOneById(1L)
                 
         );

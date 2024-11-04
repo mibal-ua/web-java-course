@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ua.mibal.service.exception.ConflictException;
-import ua.mibal.service.exception.EntityNotFoundException;
+import ua.mibal.service.exception.NotFoundException;
 import ua.mibal.web.dto.ConstraintViolationProblemDetails;
 
 import static java.net.URI.create;
@@ -29,8 +29,8 @@ import static org.springframework.http.ProblemDetail.forStatusAndDetail;
 @RestControllerAdvice
 public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    ProblemDetail handle(EntityNotFoundException e) {
+    @ExceptionHandler(NotFoundException.class)
+    ProblemDetail handle(NotFoundException e) {
         log.info("Entity Not Found exception caught: " + e.getMessage());
         ProblemDetail problemDetail = forStatusAndDetail(NOT_FOUND, e.getMessage());
         problemDetail.setType(create(e.getType()));
