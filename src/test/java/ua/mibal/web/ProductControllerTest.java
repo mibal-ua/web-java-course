@@ -11,7 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ua.mibal.domain.Category;
 import ua.mibal.domain.Product;
-import ua.mibal.domain.UpdateResult;
 import ua.mibal.service.ProductService;
 import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.ProductNotFoundException;
@@ -31,8 +30,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ua.mibal.domain.UpdateResult.Type.CREATED;
-import static ua.mibal.domain.UpdateResult.Type.UPDATED;
 
 /**
  * @author Mykhailo Balakhon
@@ -163,16 +160,14 @@ class ProductControllerTest extends ControllerTest {
                 .price(valueOf(200))
                 .build();
         when(productService.update(101L, brandNewSpaceMilk))
-                .thenReturn(new UpdateResult<>(
-                        Product.builder()
-                                .id(101L)
-                                .name("Brand new Space milk")
-                                .description("Brand new Milk from the space cow")
-                                .price(valueOf(200))
-                                .category(galaxyFood())
-                                .build(),
-                        UPDATED
-                ));
+                .thenReturn(Product.builder()
+                        .id(101L)
+                        .name("Brand new Space milk")
+                        .description("Brand new Milk from the space cow")
+                        .price(valueOf(200))
+                        .category(galaxyFood())
+                        .build()
+                );
 
         mvc.perform(put("/v1/api/products/101")
                         .contentType(APPLICATION_JSON)
@@ -188,43 +183,6 @@ class ProductControllerTest extends ControllerTest {
                             "id": 1,
                             "name": "Galaxy food"
                           }
-                        }
-                        """, true));
-    }
-
-    @Test
-    void update_nonExistingShouldReturnCreated() throws Exception {
-        ProductForm brandNewSpaceMilk = ProductForm.builder()
-                .name("Brand new Space milk")
-                .description("Brand new Milk from the space cow")
-                .price(valueOf(200))
-                .build();
-        when(productService.update(101L, brandNewSpaceMilk))
-                .thenReturn(new UpdateResult<>(
-                        Product.builder()
-                                .id(101L)
-                                .name("Brand new Space milk")
-                                .description("Brand new Milk from the space cow")
-                                .price(valueOf(200))
-                                .category(galaxyFood())
-                                .build(),
-                        CREATED
-                ));
-
-        mvc.perform(put("/v1/api/products/101")
-                        .contentType(APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(brandNewSpaceMilk)))
-                .andExpect(status().isCreated())
-                .andExpect(content().json("""  
-                        {
-                          "id": 101,
-                          "name": "Brand new Space milk",
-                          "description": "Brand new Milk from the space cow",
-                          "price": 200,
-                            "category": {
-                              "id": 1,
-                              "name": "Galaxy food"
-                            }
                         }
                         """, true));
     }

@@ -3,7 +3,6 @@ package ua.mibal.web;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ua.mibal.domain.Product;
-import ua.mibal.domain.UpdateResult;
 import ua.mibal.service.ProductService;
 import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.model.ProductForm;
@@ -60,15 +57,13 @@ public class ProductController implements ProductControllerDocumentation {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDto> update(
+    public ProductDto update(
             @PathVariable Long id,
             @Valid @RequestBody ProductForm product
     ) {
-        UpdateResult<Product> update = service.update(id, product);
-        ProductDto response = mapper.toDto(update.entity());
-        return ResponseEntity
-                .status(update.type().getHttpCode())
-                .body(response);
+        return mapper.toDto(
+                service.update(id, product)
+        );
     }
 
     @DeleteMapping("/{id}")

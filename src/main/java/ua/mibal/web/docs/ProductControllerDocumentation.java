@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
 import ua.mibal.service.model.ProductForm;
 import ua.mibal.web.dto.ConstraintViolationProblemDetails;
 import ua.mibal.web.dto.ProductDto;
@@ -45,12 +44,11 @@ public interface ProductControllerDocumentation {
 
     @Operation(summary = "Update/create Product")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Product updated"),
-            @ApiResponse(responseCode = "201", description = "Product created"),
+            @ApiResponse(responseCode = "200", description = "Product updated or created"),
             @ApiResponse(responseCode = "400", description = "Passed form to update is not valid",
                     content = @Content(schema = @Schema(implementation = ConstraintViolationProblemDetails.class))),
     })
-    ResponseEntity<ProductDto> update(Long id, ProductForm product);
+    ProductDto update(Long id, ProductForm product);
 
     @Operation(summary = "Delete Product by id")
     @ApiResponses(value = {

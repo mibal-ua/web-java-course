@@ -3,7 +3,6 @@ package ua.mibal.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.mibal.domain.Product;
-import ua.mibal.domain.UpdateResult;
 import ua.mibal.repository.ProductRepository;
 import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.ProductNotFoundException;
@@ -12,9 +11,6 @@ import ua.mibal.service.model.ProductForm;
 
 import java.util.List;
 import java.util.Optional;
-
-import static ua.mibal.domain.UpdateResult.Type.CREATED;
-import static ua.mibal.domain.UpdateResult.Type.UPDATED;
 
 /**
  * @author Mykhailo Balakhon
@@ -40,23 +36,17 @@ public class ProductService {
         return repository.save(mapper.toEntity(product));
     }
 
-    public UpdateResult<Product> update(Long id, ProductForm form) {
+    public Product update(Long id, ProductForm form) {
         validateUnique(form.name());
         Optional<Product> optionalProduct = repository.findById(id);
         if (optionalProduct.isEmpty()) {
             Product product = mapper.toEntity(id, form);
-            return new UpdateResult<>(
-                    repository.save(product),
-                    CREATED
-            );
+            return repository.save(product);
         }
         Product product = optionalProduct.get();
         mapper.update(product, form);
         repository.save(product);
-        return new UpdateResult<>(
-                product,
-                UPDATED
-        );
+        return product;
     }
 
     public void deleteById(Long id) {
