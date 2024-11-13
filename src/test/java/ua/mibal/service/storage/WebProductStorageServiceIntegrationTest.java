@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.mibal.domain.Product;
 import ua.mibal.service.model.ProductForm;
+import ua.mibal.service.storage.exception.WebServiceProductException;
 import ua.mibal.web.dto.ProductDto;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -36,7 +38,6 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
         stubFor(WireMock.get("/v1/api/products/exists?name=Space%20milk")
                 .willReturn(aResponse().withStatus(204)));
 
-
         assertThat(repository.existsByName("Space milk")).isTrue();
     }
 
@@ -46,6 +47,17 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
                 .willReturn(aResponse().withStatus(404)));
 
         assertThat(repository.existsByName("Space milk")).isFalse();
+    }
+
+    @Test
+    void existsByName_shouldThrowIsServiceException() {
+        stubFor(WireMock.get("/v1/api/products/exists?name=Space%20milk")
+                .willReturn(aResponse().withStatus(500)));
+
+        assertThrows(
+                WebServiceProductException.class, 
+                () -> repository.existsByName("Space milk")
+        );
     }
 
     @Test
@@ -79,6 +91,17 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
         Optional<Product> actual = repository.findById(101L);
 
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void findById_shouldThrowIfServiceException() {
+        stubFor(WireMock.get("/v1/api/products/101")
+                .willReturn(aResponse().withStatus(500)));
+
+        assertThrows(
+                WebServiceProductException.class, 
+                () -> repository.findById(101L)
+        );
     }
 
     @Test

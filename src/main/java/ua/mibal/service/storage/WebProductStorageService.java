@@ -13,7 +13,7 @@ import ua.mibal.domain.Product;
 import ua.mibal.service.ProductStorageService;
 import ua.mibal.service.mapper.ProductMapper;
 import ua.mibal.service.storage.config.props.WebServiceProductStorageProps;
-import ua.mibal.service.storage.exception.WebServiceProductRepositoryException;
+import ua.mibal.service.storage.exception.WebServiceProductException;
 import ua.mibal.web.dto.ProductDto;
 import ua.mibal.web.mapper.ProductDtoMapper;
 
@@ -40,11 +40,11 @@ public class WebProductStorageService implements ProductStorageService {
                 .uri(props.url() + "/exists?name={name}", name)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (request, response) -> {
-                    if (response.getStatusCode() != HttpStatus.NOT_FOUND) {
+                    if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
                         return;
                     }
                     log.error("Server response failed to check Product by name exists {}", response.getStatusCode());
-                    throw new WebServiceProductRepositoryException("Failed to check Product by name exists", request, response);   
+                    throw new WebServiceProductException("Failed to check Product by name exists", request, response);   
                 })
                 .toBodilessEntity()
                 .getStatusCode();
@@ -57,11 +57,11 @@ public class WebProductStorageService implements ProductStorageService {
                 .uri(props.url() + "/{id}", id)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (request, response) -> {
-                    if (response.getStatusCode() != HttpStatus.NOT_FOUND) {
+                    if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
                         return;
                     }
                     log.error("Server response failed to find Product by id {}", response.getStatusCode());
-                    throw new WebServiceProductRepositoryException("Failed to find Product by id", request, response);
+                    throw new WebServiceProductException("Failed to find Product by id", request, response);
                 })
                 .toEntity(ProductDto.class);
         return Optional.ofNullable(
@@ -74,9 +74,9 @@ public class WebProductStorageService implements ProductStorageService {
         List<ProductDto> products = restClient.get()
                 .uri(props.url())
                 .retrieve()
-                .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
+                .onStatus(HttpStatusCode::isError, (request, response) -> {
                     log.error("Server response failed to get all Products {}", response.getStatusCode());
-                    throw new WebServiceProductRepositoryException("Failed to get all Products", request, response);
+                    throw new WebServiceProductException("Failed to get all Products", request, response);
                 })
                 .body(new ParameterizedTypeReference<>() {
                 });
@@ -96,9 +96,9 @@ public class WebProductStorageService implements ProductStorageService {
         restClient.delete()
                 .uri(props.url() + "/{id}", id)
                 .retrieve()
-                .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
+                .onStatus(HttpStatusCode::isError, (request, response) -> {
                     log.error("Server response failed to delete one Product by id {}", response.getStatusCode());
-                    throw new WebServiceProductRepositoryException("Failed to delete one Product by id", request, response);
+                    throw new WebServiceProductException("Failed to delete one Product by id", request, response);
                 });
     }
 
@@ -107,9 +107,9 @@ public class WebProductStorageService implements ProductStorageService {
                 .uri(props.url())
                 .body(productMapper.toForm(entity))
                 .retrieve()
-                .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
-                    log.error("Server response failed to find Product by id {}", response.getStatusCode());
-                    throw new WebServiceProductRepositoryException("Failed to find Product by id", request, response);
+                .onStatus(HttpStatusCode::isError, (request, response) -> {
+                    log.error("Server response failed to save Product {}", response.getStatusCode());
+                    throw new WebServiceProductException("Failed to find Product by id", request, response);
                 })
                 .body(ProductDto.class);
         return productDtoMapper.toEntity(product);
@@ -120,9 +120,9 @@ public class WebProductStorageService implements ProductStorageService {
                 .uri(props.url() + "/{id}", entity.getId())
                 .body(productMapper.toForm(entity))
                 .retrieve()
-                .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
-                    log.error("Server response failed to find Product by id {}", response.getStatusCode());
-                    throw new WebServiceProductRepositoryException("Failed to find Product by id", request, response);
+                .onStatus(HttpStatusCode::isError, (request, response) -> {
+                    log.error("Server response failed to put Product by id {}", response.getStatusCode());
+                    throw new WebServiceProductException("Failed to find Product by id", request, response);
                 })
                 .body(ProductDto.class);
         return productDtoMapper.toEntity(product);
