@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
 @ConfigurationProperties(prefix = "application.web-service-product-repository")
-public record WebServiceProductRepositoryProps(
+public record WebServiceProductStorageProps(
         String url
 ) {
 }
