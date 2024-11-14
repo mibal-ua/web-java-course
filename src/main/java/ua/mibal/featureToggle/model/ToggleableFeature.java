@@ -12,5 +12,5 @@ import lombok.RequiredArgsConstructor;
 public enum ToggleableFeature {
     COSMO_CAT("cosmo-cat");
 
-    private final String featureName;
+    private final String name;
 }
