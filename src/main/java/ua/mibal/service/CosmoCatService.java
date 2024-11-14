@@ -2,11 +2,11 @@ package ua.mibal.service;
 
 import org.springframework.stereotype.Service;
 import ua.mibal.domain.CosmoCat;
-import ua.mibal.featureToggle.model.FeatureToggle;
+import ua.mibal.featureToggle.annotation.FeatureToggle;
 
 import java.util.List;
 
-import static ua.mibal.featureToggle.model.ToggleableFeature.COSMO_CAT;
+import static ua.mibal.featureToggle.ToggleableFeature.COSMO_CAT;
 
 /**
  * @author Mykhailo Balakhon

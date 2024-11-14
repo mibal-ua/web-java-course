@@ -10,7 +10,7 @@ import ua.mibal.test.featureToggle.annotation.EnableFeature;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ua.mibal.featureToggle.model.ToggleableFeature.COSMO_CAT;
+import static ua.mibal.featureToggle.ToggleableFeature.COSMO_CAT;
 
 /**
  * @author Mykhailo Balakhon

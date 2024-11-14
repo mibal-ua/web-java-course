@@ -5,9 +5,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import ua.mibal.featureToggle.FeatureToggleService;
+import ua.mibal.featureToggle.ToggleableFeature;
+import ua.mibal.featureToggle.annotation.FeatureToggle;
 import ua.mibal.featureToggle.exception.FeatureToggleException;
-import ua.mibal.featureToggle.model.FeatureToggle;
-import ua.mibal.featureToggle.model.ToggleableFeature;
 
 /**
  * @author Mykhailo Balakhon

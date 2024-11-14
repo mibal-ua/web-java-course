@@ -1,4 +1,4 @@
-package ua.mibal.featureToggle.model;
+package ua.mibal.featureToggle;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
