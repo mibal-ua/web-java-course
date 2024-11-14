@@ -1,20 +1,17 @@
 package ua.mibal.featureToggle.prop;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author Mykhailo Balakhon
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
-@RequiredArgsConstructor
-@ConfigurationProperties(prefix = "feature")
+@Getter
+@ConfigurationProperties("feature")
 public class FeatureToggleProps {
-    private final Map<String, Boolean> toggles;
-
-    public boolean isEnabled(String toggle) {
-        return toggles.getOrDefault(toggle + ".enabled", false);
-    }
+    private Map<String, Boolean> toggles = new HashMap<>();
 }

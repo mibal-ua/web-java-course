@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
+import ua.mibal.featureToggle.FeatureToggleService;
 import ua.mibal.featureToggle.exception.FeatureToggleException;
 import ua.mibal.featureToggle.model.FeatureToggle;
 import ua.mibal.featureToggle.model.ToggleableFeature;
-import ua.mibal.featureToggle.prop.FeatureToggleProps;
 
 /**
  * @author Mykhailo Balakhon
@@ -17,7 +17,7 @@ import ua.mibal.featureToggle.prop.FeatureToggleProps;
 @Aspect
 @Component
 public class FeatureToggleAspect {
-    private final FeatureToggleProps props;
+    private final FeatureToggleService service;
     
     @Before("@annotation(featureToggle)")
     public void before(FeatureToggle featureToggle) {
@@ -25,7 +25,7 @@ public class FeatureToggleAspect {
     }
 
     private void checkIsEnabled(ToggleableFeature feature) {
-        if (props.isEnabled(feature.getName())) {
+        if (service.isEnabled(feature.getName())) {
             return;
         }
         throw new FeatureToggleException("Feature is disabled");
