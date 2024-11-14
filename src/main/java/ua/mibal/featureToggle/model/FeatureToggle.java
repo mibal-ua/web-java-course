@@ -1,4 +1,4 @@
-package ua.mibal.aopFeature.model;
+package ua.mibal.featureToggle.model;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

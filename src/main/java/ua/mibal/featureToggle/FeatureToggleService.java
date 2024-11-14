@@ -1,4 +1,4 @@
-package ua.mibal.aopFeature;
+package ua.mibal.featureToggle;
 
 import org.springframework.stereotype.Service;
 
