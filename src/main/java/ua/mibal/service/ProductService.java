@@ -1,0 +1,60 @@
+package ua.mibal.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import ua.mibal.domain.Product;
+import ua.mibal.service.exception.ConflictException;
+import ua.mibal.service.exception.ProductNotFoundException;
+import ua.mibal.service.mapper.ProductMapper;
+import ua.mibal.service.model.ProductForm;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * @author Mykhailo Balakhon
+ * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
+ */
+@RequiredArgsConstructor
+@Service
+public class ProductService {
+    private final ProductStorageService repository;
+    private final ProductMapper mapper;
+
+    public List<Product> getAll() {
+        return repository.findAll();
+    }
+
+    public Product getOneById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(ProductNotFoundException::new);
+    }
+
+    public Product create(ProductForm product) {
+        validateUnique(product.name());
+        return repository.save(mapper.toEntity(product));
+    }
+
+    public Product update(Long id, ProductForm form) {
+        validateUnique(form.name());
+        Optional<Product> optionalProduct = repository.findById(id);
+        if (optionalProduct.isEmpty()) {
+            Product product = mapper.toEntity(id, form);
+            return repository.save(product);
+        }
+        Product product = optionalProduct.get();
+        mapper.update(product, form);
+        repository.save(product);
+        return product;
+    }
+
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
+    private void validateUnique(String name) {
+        if (repository.existsByName(name)) {
+            throw new ConflictException("Product with name " + name + " already exists");
+        }
+    }
+}
