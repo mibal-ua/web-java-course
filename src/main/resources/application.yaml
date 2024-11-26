@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: web-java-course
+  datasource:
+    url:
+    username:
+    password:
   jpa:
     hibernate.ddl-auto: update
 
