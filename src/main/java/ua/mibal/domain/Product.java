@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Mykhailo Balakhon
@@ -21,5 +21,5 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal price;
-    private List<Category> categories;
+    private Set<Category> categories;
 }

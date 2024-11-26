@@ -4,7 +4,7 @@ import lombok.Builder;
 import ua.mibal.domain.Category;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Mykhailo Balakhon
@@ -16,6 +16,6 @@ public record ProductDto(
         String name,
         String description,
         BigDecimal price,
-        List<Category> categories
+        Set<Category> categories
 ) {
 }

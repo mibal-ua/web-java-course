@@ -16,6 +16,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.REMOVE;
 
@@ -49,7 +50,7 @@ public class ProductEntity {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private List<CategoryEntity> categories;
+    private Set<CategoryEntity> categories;
 
     @OneToMany(mappedBy = "product", cascade = REMOVE)
     private List<OrderEntity> orders;

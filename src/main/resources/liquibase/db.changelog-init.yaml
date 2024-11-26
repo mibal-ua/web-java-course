@@ -1,0 +1,127 @@
+databaseChangeLog:
+  - changeSet:
+      id: lab-3
+      author: mibal
+      changes:
+
+        # Create the categories table with sequence for 'id'
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+        - createSequence:
+            sequenceName: categories_seq
+            incrementBy: 50
+
+        # Create the products table with sequence for 'id'
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: NUMERIC(38, 2)
+                  constraints:
+                    nullable: false
+
+        - createSequence:
+            sequenceName: products_seq
+            incrementBy: 50
+
+        # Create the orders table with sequence for 'id'
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: timestamp
+                  type: timestamp(6)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    
+        # Add foreign key constraint for product_id to the products table
+        - addForeignKeyConstraint:
+            baseTableName: orders
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            constraintName: fk_orders_products
+
+        - createSequence:
+            sequenceName: orders_seq
+            incrementBy: 50
+            
+        
+        # Add join table product_categories
+        - createTable:
+            tableName: product_categories
+            columns:
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        
+        # Add foreign key constraint for product_id to the product_categories table
+        - addForeignKeyConstraint:
+            baseTableName: product_categories
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            constraintName: fk_product_categories_products
+        
+        # Add foreign key constraint for category_id to the product_categories table
+        - addForeignKeyConstraint:
+            baseTableName: product_categories
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_product_categories_categories
