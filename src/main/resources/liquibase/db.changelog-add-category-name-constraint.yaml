@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: lab-3-add-category-name-constraint
+      author: mibal
+      changes:
+
+        # Add unique constraint and index for categories.name
+        - createIndex:
+            columns:
+              - column:
+                  name: name
+            indexName: idx_categories_name
+            tableName: categories
+            unique: true
