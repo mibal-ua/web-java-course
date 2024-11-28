@@ -1,7 +1,7 @@
 package ua.mibal.service.mapper;
 
 import org.junit.jupiter.api.Test;
-import ua.mibal.domain.Category;
+import ua.mibal.repository.entity.CategoryEntity;
 import ua.mibal.service.model.CategoryForm;
 import ua.mibal.test.annotation.UnitTest;
 
@@ -20,7 +20,7 @@ class CategoryMapperTest {
 
     @Test
     void toEntity_shouldReturnNull() {
-        Category actual = mapper.toEntity(null);
+        CategoryEntity actual = mapper.toEntity(null);
 
         assertNull(actual);
     }
@@ -32,7 +32,7 @@ class CategoryMapperTest {
 
     @Test
     void toEntity_withId_shouldMapIfFormIsNull() {
-        Category actual = mapper.toEntity(1L, null);
+        CategoryEntity actual = mapper.toEntity(1L, null);
 
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isEqualTo(1L);
@@ -45,7 +45,7 @@ class CategoryMapperTest {
                 .name("name")
                 .build();
 
-        Category actual = mapper.toEntity(null, form);
+        CategoryEntity actual = mapper.toEntity(null, form);
 
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isNull();
@@ -54,7 +54,7 @@ class CategoryMapperTest {
 
     @Test
     void update_shouldNotUpdateIfSourceIsNull() {
-        Category target = mock();
+        CategoryEntity target = mock();
 
         mapper.update(target, null);
 

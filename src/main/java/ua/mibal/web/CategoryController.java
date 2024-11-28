@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ua.mibal.service.CategoryService;
 import ua.mibal.service.exception.CategoryNotFoundException;
-import ua.mibal.service.mapper.CategoryMapper;
 import ua.mibal.service.model.CategoryForm;
 import ua.mibal.web.dto.CategoryDto;
+import ua.mibal.web.mapper.CategoryDtoMapper;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequestMapping("/v1/api/categories")
 public class CategoryController {
     private final CategoryService service;
-    private final CategoryMapper mapper;
+    private final CategoryDtoMapper mapper;
 
     @GetMapping
     public List<CategoryDto> getAll() {

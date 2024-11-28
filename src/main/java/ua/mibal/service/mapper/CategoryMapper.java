@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import ua.mibal.domain.Category;
+import ua.mibal.repository.entity.CategoryEntity;
 import ua.mibal.service.model.CategoryForm;
-import ua.mibal.web.dto.CategoryDto;
 
 import java.util.List;
 
@@ -22,13 +22,13 @@ public interface CategoryMapper {
         return Mappers.getMapper(CategoryMapper.class);
     }
 
-    Category toEntity(CategoryForm product);
+    CategoryEntity toEntity(CategoryForm product);
 
-    Category toEntity(Long id, CategoryForm form);
+    CategoryEntity toEntity(Long id, CategoryForm form);
 
-    void update(@MappingTarget Category target, CategoryForm source);
+    void update(@MappingTarget CategoryEntity target, CategoryForm source);
 
-    List<CategoryDto> toDto(List<Category> categories);
+    List<Category> toModel(List<CategoryEntity> all);
 
-    CategoryDto toDto(Category category);
+    Category toModel(CategoryEntity categoryEntity);
 }
