@@ -8,4 +8,6 @@ import ua.mibal.repository.entity.ProductEntity;
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
+
+    boolean existsByName(String name);
 }
