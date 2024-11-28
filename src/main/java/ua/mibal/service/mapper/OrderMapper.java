@@ -1,6 +1,7 @@
 package ua.mibal.service.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import ua.mibal.domain.Order;
 import ua.mibal.repository.entity.OrderEntity;
 import ua.mibal.service.model.OrderForm;
@@ -23,5 +24,5 @@ public interface OrderMapper {
 
     OrderEntity toEntity(Long id, OrderForm product);
 
-    void update(OrderEntity order, OrderForm form);
+    void update(@MappingTarget OrderEntity order, OrderForm form);
 }
