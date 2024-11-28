@@ -8,6 +8,7 @@ import ua.mibal.domain.Order;
 import ua.mibal.repository.OrderRepository;
 import ua.mibal.repository.ProductRepository;
 import ua.mibal.repository.entity.OrderEntity;
+import ua.mibal.repository.projection.ProductOrderingStatistics;
 import ua.mibal.service.exception.OrderNotFoundException;
 import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.mapper.OrderMapper;
@@ -69,6 +70,10 @@ public class OrderService {
 
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    public List<ProductOrderingStatistics> getProductOrderingStatistics() {
+        return repository.getProductOrderingStatistics();
     }
 
     private void validate(OrderForm order) {

@@ -16,6 +16,7 @@ import ua.mibal.service.OrderService;
 import ua.mibal.service.exception.OrderNotFoundException;
 import ua.mibal.service.model.OrderForm;
 import ua.mibal.web.dto.OrderDto;
+import ua.mibal.web.dto.ProductOrderingStatisticsDto;
 import ua.mibal.web.mapper.OrderDtoMapper;
 
 import java.util.List;
@@ -72,5 +73,12 @@ public class OrderController {
             service.deleteById(id);
         } catch (OrderNotFoundException e) {
         }
+    }
+
+    @GetMapping("/statistics")
+    public List<ProductOrderingStatisticsDto> getProductOrderingStatistics() {
+        return mapper.toStatisticsDto(
+                service.getProductOrderingStatistics()
+        );
     }
 }
