@@ -34,7 +34,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public Category getOneByName(String name) {
         return mapper.toModel(
-                repository.findById(name)
+                repository.findByNaturalId(name)
                         .orElseThrow(CategoryNotFoundException::new)
         );
     }
@@ -49,7 +49,7 @@ public class CategoryService {
     @Transactional
     public Category update(String name, CategoryForm form) {
         validateUnique(form.name());
-        Optional<CategoryEntity> optionalCategory = repository.findById(name);
+        Optional<CategoryEntity> optionalCategory = repository.findByNaturalId(name);
         if (optionalCategory.isEmpty()) {
             CategoryEntity product = mapper.toEntity(name, form);
             return mapper.toModel(
@@ -65,7 +65,7 @@ public class CategoryService {
     }
 
     public void deleteByName(String name) {
-        repository.deleteById(name);
+        repository.deleteByNaturalId(name);
     }
 
     private void validateUnique(String name) {
