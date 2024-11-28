@@ -2,6 +2,7 @@ package ua.mibal.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.mibal.domain.Product;
 import ua.mibal.repository.ProductRepository;
 import ua.mibal.repository.entity.ProductEntity;
@@ -23,12 +24,14 @@ public class ProductService {
     private final ProductRepository repository;
     private final ProductMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<Product> getAll() {
         return mapper.toModel(
                 repository.findAll()
         );
     }
 
+    @Transactional(readOnly = true)
     public Product getOneById(Long id) {
         return mapper.toModel(
                 repository.findById(id)
@@ -43,6 +46,7 @@ public class ProductService {
         );
     }
 
+    @Transactional
     public Product update(Long id, ProductForm form) {
         validateUnique(form.name());
         Optional<ProductEntity> optionalProduct = repository.findById(id);
