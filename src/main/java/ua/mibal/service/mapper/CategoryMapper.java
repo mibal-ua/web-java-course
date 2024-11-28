@@ -24,7 +24,7 @@ public interface CategoryMapper {
 
     CategoryEntity toEntity(CategoryForm product);
 
-    CategoryEntity toEntity(Long id, CategoryForm form);
+    CategoryEntity toEntity(String name, CategoryForm form);
 
     void update(@MappingTarget CategoryEntity target, CategoryForm source);
 

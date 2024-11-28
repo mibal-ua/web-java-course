@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 
 /**
  * @author Mykhailo Balakhon
@@ -21,6 +22,7 @@ public class CategoryEntity {
     @Id @GeneratedValue
     private Long id;
     
+    @NaturalId
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 }

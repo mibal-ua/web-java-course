@@ -40,10 +40,10 @@ public class CategoryController {
         );
     }
 
-    @GetMapping("/{id}")
-    public CategoryDto getOne(@PathVariable Long id) {
+    @GetMapping("/{name}")
+    public CategoryDto getOne(@PathVariable String name) {
         return mapper.toDto(
-                service.getOneById(id)
+                service.getOneByName(name)
         );
     }
 
@@ -55,21 +55,21 @@ public class CategoryController {
         );
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{name}")
     public CategoryDto update(
-            @PathVariable Long id,
+            @PathVariable String name,
             @Valid @RequestBody CategoryForm category
     ) {
         return mapper.toDto(
-                service.update(id, category)
+                service.update(name, category)
         );
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{name}")
     @ResponseStatus(NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable String name) {
         try {
-            service.deleteById(id);
+            service.deleteByName(name);
         } catch (CategoryNotFoundException e) {
         }
     }

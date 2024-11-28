@@ -32,9 +32,9 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public Category getOneById(Long id) {
+    public Category getOneByName(String name) {
         return mapper.toModel(
-                repository.findById(id)
+                repository.findById(name)
                         .orElseThrow(CategoryNotFoundException::new)
         );
     }
@@ -47,11 +47,11 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category update(Long id, CategoryForm form) {
+    public Category update(String name, CategoryForm form) {
         validateUnique(form.name());
-        Optional<CategoryEntity> optionalCategory = repository.findById(id);
+        Optional<CategoryEntity> optionalCategory = repository.findById(name);
         if (optionalCategory.isEmpty()) {
-            CategoryEntity product = mapper.toEntity(id, form);
+            CategoryEntity product = mapper.toEntity(name, form);
             return mapper.toModel(
                     repository.save(product)
             );
@@ -64,8 +64,8 @@ public class CategoryService {
         );
     }
 
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public void deleteByName(String name) {
+        repository.deleteById(name);
     }
 
     private void validateUnique(String name) {
