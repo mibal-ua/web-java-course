@@ -5,6 +5,9 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import ua.mibal.domain.Category;
 import ua.mibal.service.model.CategoryForm;
+import ua.mibal.web.dto.CategoryDto;
+
+import java.util.List;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
@@ -24,4 +27,8 @@ public interface CategoryMapper {
     Category toEntity(Long id, CategoryForm form);
 
     void update(@MappingTarget Category target, CategoryForm source);
+
+    List<CategoryDto> toDto(List<Category> categories);
+
+    CategoryDto toDto(Category category);
 }
