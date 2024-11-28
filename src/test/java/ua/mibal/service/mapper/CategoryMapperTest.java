@@ -32,10 +32,10 @@ class CategoryMapperTest {
 
     @Test
     void toEntity_withId_shouldMapIfFormIsNull() {
-        CategoryEntity actual = mapper.toEntity(1L, null);
+        CategoryEntity actual = mapper.toEntity("name", null);
 
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(1L);
+        assertThat(actual.getName()).isEqualTo("name");
         assertThat(actual.getName()).isNull();
     }
 
