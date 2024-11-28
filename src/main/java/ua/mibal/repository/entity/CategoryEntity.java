@@ -21,6 +21,6 @@ public class CategoryEntity {
     @Id @GeneratedValue
     private Long id;
     
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 }
