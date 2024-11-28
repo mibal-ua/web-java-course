@@ -34,4 +34,10 @@ public class NaturalIdRepositoryImpl<T, ID extends Serializable> extends SimpleJ
         findByNaturalId(naturalId)
                 .ifPresent(this::delete);
     }
+
+    @Override
+    public boolean existsByNaturalId(ID naturalId) {
+        return findByNaturalId(naturalId)
+                .isPresent();
+    }
 }

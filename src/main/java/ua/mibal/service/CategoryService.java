@@ -69,7 +69,7 @@ public class CategoryService {
     }
 
     private void validateUnique(String name) {
-        if (repository.existsByName(name)) {
+        if (repository.existsByNaturalId(name)) {
             throw new ConflictException("Category with name " + name + " already exists");
         }
     }

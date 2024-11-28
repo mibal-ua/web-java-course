@@ -15,4 +15,6 @@ public interface NaturalIdRepository<T, ID> extends JpaRepository<T, ID> {
     Optional<T> findByNaturalId(ID naturalId);
 
     void deleteByNaturalId(ID naturalId);
+
+    boolean existsByNaturalId(ID naturalId);
 }
