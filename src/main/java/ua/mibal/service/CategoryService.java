@@ -5,14 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.mibal.domain.Category;
 import ua.mibal.repository.CategoryRepository;
-import ua.mibal.repository.entity.CategoryEntity;
 import ua.mibal.service.exception.CategoryNotFoundException;
 import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.mapper.CategoryMapper;
 import ua.mibal.service.model.CategoryForm;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Mykhailo Balakhon
@@ -43,24 +41,6 @@ public class CategoryService {
         validateUnique(product.name());
         return mapper.toModel(
                 repository.save(mapper.toEntity(product))
-        );
-    }
-
-    @Transactional
-    public Category update(String name, CategoryForm form) {
-        validateUnique(form.name());
-        Optional<CategoryEntity> optionalCategory = repository.findByNaturalId(name);
-        if (optionalCategory.isEmpty()) {
-            CategoryEntity product = mapper.toEntity(name, form);
-            return mapper.toModel(
-                    repository.save(product)
-            );
-        }
-        CategoryEntity product = optionalCategory.get();
-        mapper.update(product, form);
-        repository.save(product);
-        return mapper.toModel(
-                product
         );
     }
 
