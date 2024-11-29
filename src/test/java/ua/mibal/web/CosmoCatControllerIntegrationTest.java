@@ -2,8 +2,6 @@ package ua.mibal.web;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
 import ua.mibal.test.featureToggle.FeatureToggleExtension;
 import ua.mibal.test.featureToggle.annotation.DisableFeature;
 import ua.mibal.test.featureToggle.annotation.EnableFeature;
@@ -18,8 +16,6 @@ import static ua.mibal.featureToggle.ToggleableFeature.COSMO_CAT;
  */
 @ExtendWith(FeatureToggleExtension.class)
 class CosmoCatControllerIntegrationTest extends IntegrationTest {
-    @Autowired
-    private MockMvc mvc;
 
     @Test
     @EnableFeature(COSMO_CAT)
