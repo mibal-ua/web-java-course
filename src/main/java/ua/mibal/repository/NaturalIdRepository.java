@@ -10,11 +10,11 @@ import java.util.Optional;
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
 @NoRepositoryBean
-public interface NaturalIdRepository<T, ID> extends JpaRepository<T, ID> {
+public interface NaturalIdRepository<T, ID, NID> extends JpaRepository<T, ID> {
 
-    Optional<T> findByNaturalId(ID naturalId);
+    Optional<T> findByNaturalId(NID naturalId);
 
-    void deleteByNaturalId(ID naturalId);
+    void deleteByNaturalId(NID naturalId);
 
-    boolean existsByNaturalId(ID naturalId);
+    boolean existsByNaturalId(NID naturalId);
 }
