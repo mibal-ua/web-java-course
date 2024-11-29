@@ -64,6 +64,7 @@ public class CategoryService {
         );
     }
 
+    @Transactional
     public void deleteByName(String name) {
         repository.deleteByNaturalId(name);
     }

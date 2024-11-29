@@ -1,0 +1,129 @@
+package ua.mibal.web;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ua.mibal.repository.CategoryRepository;
+import ua.mibal.repository.entity.CategoryEntity;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+/**
+ * @author Mykhailo Balakhon
+ * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
+ */
+class CategoryControllerIntegrationTest extends IntegrationTest {
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @BeforeEach
+    void clean() {
+        categoryRepository.deleteAll();
+    }
+
+    @Test
+    void getAll() throws Exception {
+        given(CategoryEntity.builder()
+                .name("SPACESHIP")
+                .build());
+
+        mvc.perform(get("/v1/api/categories"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [
+                          {
+                            "name": "SPACESHIP"
+                          }
+                        ]
+                        """));
+    }
+
+    @Test
+    void getOne() throws Exception {
+        given(CategoryEntity.builder()
+                .name("SPACESHIP")
+                .build());
+
+        mvc.perform(get("/v1/api/categories/SPACESHIP"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                          "name": "SPACESHIP"
+                        }
+                        """));
+    }
+
+    @Test
+    void getOne_NotFound() throws Exception {
+        mvc.perform(get("/v1/api/categories/SPACESHIP"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void create() throws Exception {
+        mvc.perform(post("/v1/api/categories")
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "name": "SPACESHIP"
+                                }
+                                """))
+                .andExpect(status().isCreated());
+
+        verifyExists(CategoryEntity.builder()
+                .name("SPACESHIP")
+                .build());
+    }
+
+    @Test
+    void create_shouldThrow_ifAlreadyExists() throws Exception {
+        given(CategoryEntity.builder()
+                .name("SPACESHIP")
+                .build());
+
+        mvc.perform(post("/v1/api/categories")
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "name": "SPACESHIP"
+                                }
+                                """))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void delete() throws Exception {
+        given(CategoryEntity.builder()
+                .name("SPACESHIP")
+                .build());
+
+        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/categories/SPACESHIP"))
+                .andExpect(status().isNoContent());
+
+        verifyDoesNotExist(CategoryEntity.builder()
+                .name("SPACESHIP")
+                .build());
+    }
+
+    private void given(CategoryEntity... category) {
+        categoryRepository.saveAll(asList(category));
+    }
+
+    private void verifyExists(CategoryEntity category) {
+        assertThat(
+                categoryRepository.existsByNaturalId(category.getName())
+        ).isTrue();
+    }
+
+    private void verifyDoesNotExist(CategoryEntity category) {
+        assertThat(
+                categoryRepository.existsByNaturalId(category.getName())
+        ).isFalse();
+    }
+}
