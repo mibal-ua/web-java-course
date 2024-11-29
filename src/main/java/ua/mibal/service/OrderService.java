@@ -14,6 +14,7 @@ import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.mapper.OrderMapper;
 import ua.mibal.service.model.OrderForm;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ public class OrderService {
     private final OrderRepository repository;
     private final ProductRepository orderRepository;
     private final OrderMapper mapper;
+    private final ProductRepository productRepository;
 
     @Transactional(readOnly = true)
     public List<Order> getAll() {
@@ -43,25 +45,27 @@ public class OrderService {
         );
     }
 
-    public Order create(OrderForm order) {
-        validate(order);
+    @Transactional
+    public Order create(OrderForm form) {
+        validate(form);
+        OrderEntity order = mapper.toEntity(form);
+        order.setProduct(productRepository.findById(form.getProductId()).get());
+        order.setTimestamp(new Date());
         return mapper.toModel(
-                repository.save(mapper.toEntity(order))
+                repository.save(order)
         );
     }
 
     @Transactional
-    public Order update(Long id, OrderForm form) {
+    public Order update(OrderForm form) {
         validate(form);
-        Optional<OrderEntity> optionalOrder = repository.findById(id);
+        Optional<OrderEntity> optionalOrder = repository.findById(form.getId());
         if (optionalOrder.isEmpty()) {
-            OrderEntity order = mapper.toEntity(id, form);
-            return mapper.toModel(
-                    repository.save(order)
-            );
+            return create(form);
         }
         OrderEntity order = optionalOrder.get();
         mapper.update(order, form);
+        order.setProduct(productRepository.findById(form.getProductId()).get());
         repository.save(order);
         return mapper.toModel(
                 order
@@ -82,7 +86,7 @@ public class OrderService {
 
     private void validateQuantityAvailable(OrderForm order) {
         // TODO check available quantity of product
-        validateProductExists(order.productId());
+        validateProductExists(order.getProductId());
     }
 
     private void validateProductExists(@NotNull Long orderId) {

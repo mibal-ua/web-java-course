@@ -59,10 +59,11 @@ public class OrderController {
     @PutMapping("/{id}")
     public OrderDto update(
             @PathVariable Long id,
-            @Valid @RequestBody OrderForm category
+            @Valid @RequestBody OrderForm form
     ) {
+        form.setId(id);
         return mapper.toDto(
-                service.update(id, category)
+                service.update(form)
         );
     }
 

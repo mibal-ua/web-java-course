@@ -15,11 +15,12 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
     @Query("""
             SELECT
-                p.id as productId,
-                p.name as productName,
-                COUNT(o) as orderingCount
+                p.id AS productId,
+                p.name AS productName,
+                COALESCE(SUM(o.quantity), 0) AS orderingCount
             FROM ProductEntity p
-            LEFT JOIN p.orders o
+                LEFT JOIN p.orders o
+            GROUP BY p.id, p.name
             ORDER BY p.name
             """)
     List<ProductOrderingStatistics> getProductOrderingStatistics();
