@@ -20,11 +20,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 class CategoryControllerIntegrationTest extends IntegrationTest {
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryRepository repository;
 
     @BeforeEach
     void clean() {
-        categoryRepository.deleteAll();
+        repository.deleteAll();
     }
 
     @Test
@@ -112,18 +112,18 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
     }
 
     private void given(CategoryEntity... category) {
-        categoryRepository.saveAll(asList(category));
+        repository.saveAll(asList(category));
     }
 
     private void verifyExists(CategoryEntity category) {
         assertThat(
-                categoryRepository.existsByNaturalId(category.getName())
+                repository.existsByNaturalId(category.getName())
         ).isTrue();
     }
 
     private void verifyDoesNotExist(CategoryEntity category) {
         assertThat(
-                categoryRepository.existsByNaturalId(category.getName())
+                repository.existsByNaturalId(category.getName())
         ).isFalse();
     }
 }
