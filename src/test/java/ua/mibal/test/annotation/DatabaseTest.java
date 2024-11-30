@@ -20,7 +20,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         "spring.jpa.show-sql=true",
         "spring.jpa.hibernate.ddl-auto=validate",
         "spring.jpa.properties.hibernate.generate_statistics=true",
-        "spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver",
 })
 @Target(TYPE)
 @Retention(RUNTIME)
