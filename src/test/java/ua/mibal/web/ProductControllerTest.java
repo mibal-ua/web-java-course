@@ -17,6 +17,7 @@ import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.model.ProductForm;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.math.BigDecimal.valueOf;
@@ -54,7 +55,7 @@ class ProductControllerTest extends ControllerTest {
                 .name("Space milk")
                 .description("Milk from the space cow")
                 .price(valueOf(100))
-                .category(galaxyFood())
+                .categories(Set.of(galaxyFood()))
                 .build());
 
         mvc.perform(get("/v1/api/products"))
@@ -66,10 +67,10 @@ class ProductControllerTest extends ControllerTest {
                             "name": "Space milk",
                             "description": "Milk from the space cow",
                             "price": 100,
-                            "category": {
+                            "categories": [{
                               "id": 1,
                               "name": "Galaxy food"
-                            }
+                            }]
                           }
                         ]
                         """, true));
@@ -82,7 +83,7 @@ class ProductControllerTest extends ControllerTest {
                 .name("Space milk")
                 .description("Milk from the space cow")
                 .price(valueOf(100))
-                .category(galaxyFood())
+                .categories(Set.of(galaxyFood()))
                 .build());
 
         mvc.perform(get("/v1/api/products/101"))
@@ -93,10 +94,10 @@ class ProductControllerTest extends ControllerTest {
                           "name": "Space milk",
                           "description": "Milk from the space cow",
                           "price": 100,
-                            "category": {
+                            "categories": [{
                               "id": 1,
                               "name": "Galaxy food"
-                            }
+                            }]
                         }
                         """, true));
     }
@@ -165,7 +166,7 @@ class ProductControllerTest extends ControllerTest {
                         .name("Brand new Space milk")
                         .description("Brand new Milk from the space cow")
                         .price(valueOf(200))
-                        .category(galaxyFood())
+                        .categories(Set.of(galaxyFood()))
                         .build()
                 );
 
@@ -179,10 +180,10 @@ class ProductControllerTest extends ControllerTest {
                           "name": "Brand new Space milk",
                           "description": "Brand new Milk from the space cow",
                           "price": 200,
-                          "category": {
+                          "categories": [{
                             "id": 1,
                             "name": "Galaxy food"
-                          }
+                          }]
                         }
                         """, true));
     }

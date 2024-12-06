@@ -2,7 +2,10 @@ package ua.mibal.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.mibal.domain.Product;
+import ua.mibal.repository.ProductRepository;
+import ua.mibal.repository.entity.ProductEntity;
 import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.ProductNotFoundException;
 import ua.mibal.service.mapper.ProductMapper;
@@ -18,34 +21,47 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ProductService {
-    private final ProductStorageService repository;
+    private final ProductRepository repository;
     private final ProductMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<Product> getAll() {
-        return repository.findAll();
+        return mapper.toModel(
+                repository.findAll()
+        );
     }
 
+    @Transactional(readOnly = true)
     public Product getOneById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(ProductNotFoundException::new);
+        return mapper.toModel(
+                repository.findById(id)
+                .orElseThrow(ProductNotFoundException::new)
+        );
     }
 
     public Product create(ProductForm product) {
         validateUnique(product.name());
-        return repository.save(mapper.toEntity(product));
+        return mapper.toModel(
+                repository.save(mapper.toEntity(product))        
+        );
     }
 
+    @Transactional
     public Product update(Long id, ProductForm form) {
         validateUnique(form.name());
-        Optional<Product> optionalProduct = repository.findById(id);
+        Optional<ProductEntity> optionalProduct = repository.findById(id);
         if (optionalProduct.isEmpty()) {
-            Product product = mapper.toEntity(id, form);
-            return repository.save(product);
+            ProductEntity product = mapper.toEntity(id, form);
+            return mapper.toModel(
+                    repository.save(product)
+            );
         }
-        Product product = optionalProduct.get();
+        ProductEntity product = optionalProduct.get();
         mapper.update(product, form);
         repository.save(product);
-        return product;
+        return mapper.toModel(
+                product
+        );
     }
 
     public void deleteById(Long id) {

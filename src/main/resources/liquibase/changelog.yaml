@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/db.changelog-init.yaml
+  - include:
+      file: liquibase/db.changelog-init-indexes.yaml
+  - include:
+        file: liquibase/db.changelog-add-category-name-constraint.yaml

@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import ua.mibal.domain.Product;
+import ua.mibal.repository.ProductRepository;
+import ua.mibal.repository.entity.ProductEntity;
 import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.NotFoundException;
 import ua.mibal.service.mapper.ProductMapper;
@@ -30,15 +32,15 @@ import static org.mockito.Mockito.when;
  */
 @UnitTest
 class ProductServiceTest {
-    private final ProductStorageService repository = mock();
+    private final ProductRepository repository = mock();
     private final ProductService service = new ProductService(repository, ProductMapper.getInstance());
     
     @Captor
-    private ArgumentCaptor<Product> productArg;
+    private ArgumentCaptor<ProductEntity> productArg;
 
     @Test
     void getAll() {
-        given(Product.builder()
+        given(ProductEntity.builder()
                 .id(1L)
                 .name("Product 1")
                 .description("Description 1")
@@ -67,7 +69,7 @@ class ProductServiceTest {
 
     @Test
     void getOneById() {
-        given(Product.builder()
+        given(ProductEntity.builder()
                 .id(1L)
                 .name("Product 1")
                 .description("Description 1")
@@ -105,7 +107,7 @@ class ProductServiceTest {
         
         verify(repository)
                 .save(productArg.capture());
-        Product actual = productArg.getValue();
+        ProductEntity actual = productArg.getValue();
 
         assertThat(actual.getName()).isEqualTo("Product 1");
         assertThat(actual.getDescription()).isEqualTo("Description 1");
@@ -114,7 +116,7 @@ class ProductServiceTest {
 
     @Test
     void create_shouldThrowIfNameIsNotUnique() {
-        given(Product.builder()
+        given(ProductEntity.builder()
                 .name("Product 1")
                 .description("Description 1")
                 .price(valueOf(100))
@@ -136,7 +138,7 @@ class ProductServiceTest {
 
     @Test
     void update_shouldUpdateOnExisting() {
-        given(Product.builder()
+        given(ProductEntity.builder()
                 .id(1L)
                 .name("Product 1")
                 .description("Description 1")
@@ -150,7 +152,7 @@ class ProductServiceTest {
 
         service.update(1L, form);
         
-        Product actual = repository.findById(1L).get();
+        ProductEntity actual = repository.findById(1L).get();
         assertThat(actual.getName()).isEqualTo("Product 2");
         assertThat(actual.getDescription()).isEqualTo("Description 2");
         assertThat(actual.getPrice()).isEqualTo(valueOf(200));
@@ -170,7 +172,7 @@ class ProductServiceTest {
         verify(repository)
                 .save(productArg.capture());
 
-        Product actual = productArg.getValue();
+        ProductEntity actual = productArg.getValue();
         assertThat(actual.getName()).isEqualTo("Product 2");
         assertThat(actual.getDescription()).isEqualTo("Description 2");
         assertThat(actual.getPrice()).isEqualTo(valueOf(200));
@@ -178,7 +180,7 @@ class ProductServiceTest {
 
     @Test
     void update_shouldThrowIfNameIsNotUnique() {
-        given(Product.builder()
+        given(ProductEntity.builder()
                 .id(101L)
                 .name("Product 1")
                 .description("Description 1")
@@ -201,7 +203,7 @@ class ProductServiceTest {
 
     @Test
     void deleteById() {
-        given(Product.builder()
+        given(ProductEntity.builder()
                 .id(1L)
                 .name("Product 1")
                 .description("Description 1")
@@ -237,12 +239,12 @@ class ProductServiceTest {
                 .thenReturn(Optional.empty());
     }
 
-    private void given(Product... products) {
+    private void given(ProductEntity... products) {
         when(repository.findAll()).thenReturn(List.of(products));
 
         when(repository.findById(any()))
                 .thenReturn(Optional.empty());
-        for (Product product : products) {
+        for (ProductEntity product : products) {
             when(repository.findById(product.getId()))
                     .thenReturn(Optional.of(product));
             when(repository.existsByName(product.getName()))

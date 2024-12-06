@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: lab-3-indexes
+      author: mibal
+      changes:
+
+        # Add index for products.name
+        - createIndex:
+            columns:
+              - column:
+                  name: name
+            indexName: idx_products_name
+            tableName: products
+            unique: false
