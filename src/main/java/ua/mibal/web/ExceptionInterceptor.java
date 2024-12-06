@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ua.mibal.featureToggle.exception.FeatureToggleException;
 import ua.mibal.service.exception.ConflictException;
 import ua.mibal.service.exception.NotFoundException;
 import ua.mibal.web.dto.ConstraintViolationProblemDetails;
@@ -47,14 +48,21 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(FeatureToggleException.class)
+    ProblemDetail handle(FeatureToggleException e) {
+        log.info("FeatureToggleException caught: " + e.getMessage());
+        ProblemDetail problemDetail = forStatusAndDetail(NOT_FOUND, e.getMessage());
+        problemDetail.setTitle(e.getMessage());
+        return problemDetail;
+    }
+
     @ExceptionHandler(Exception.class)
     ProblemDetail handle(Exception e) {
-        log.warn("Unknown exception caught: " + e.getMessage());
+        log.error("Unknown exception caught: " + e.getMessage());
         ProblemDetail problemDetail = forStatusAndDetail(INTERNAL_SERVER_ERROR, e.getMessage());
         problemDetail.setTitle("Internal Server Error. Contact support");
         return problemDetail;
     }
-
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
