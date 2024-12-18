@@ -12,7 +12,12 @@ spring:
     enabled: true
   jpa:
     hibernate.ddl-auto: validate
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jws-algorithms: RS256 # default actually
+          jwk-set-uri: http://localhost:8083/.well-known/jwks.json
 application:
   rest-client:
     response-timeout: 1000
