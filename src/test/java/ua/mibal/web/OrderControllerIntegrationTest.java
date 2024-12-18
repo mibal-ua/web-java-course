@@ -59,7 +59,7 @@ class OrderControllerIntegrationTest extends IntegrationTest {
                 .timestamp(new Date())
                 .build());
 
-        mvc.perform(get("/v1/api/orders"))
+        mvc.perform(get("/api/v1/order/orders"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [
@@ -97,7 +97,7 @@ class OrderControllerIntegrationTest extends IntegrationTest {
                 .timestamp(new Date())
                 .build());
 
-        mvc.perform(get("/v1/api/orders/{id}", order.getId()))
+        mvc.perform(get("/api/v1/order/orders/{id}", order.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {
@@ -128,7 +128,7 @@ class OrderControllerIntegrationTest extends IntegrationTest {
                 .categories(Set.of(spaceship))
                 .build());
 
-        mvc.perform(post("/v1/api/orders")
+        mvc.perform(post("/api/v1/order/orders")
                         .contentType("application/json")
                         .content(String.format(
                                 """
@@ -179,7 +179,7 @@ class OrderControllerIntegrationTest extends IntegrationTest {
                 .timestamp(new Date())
                 .build());
 
-        mvc.perform(put("/v1/api/orders/{id}", order.getId())
+        mvc.perform(put("/api/v1/order/orders/{id}", order.getId())
                         .contentType("application/json")
                         .content(String.format(
                                 """
@@ -224,7 +224,7 @@ class OrderControllerIntegrationTest extends IntegrationTest {
                 .timestamp(new Date())
                 .build());
 
-        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/orders/{id}", order.getId()))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/orders/{id}", order.getId()))
                 .andExpect(status().isNoContent());
 
         assertThat(orderRepository.existsById(order.getId())).isFalse();
@@ -260,7 +260,7 @@ class OrderControllerIntegrationTest extends IntegrationTest {
                 .categories(Set.of(spaceship))
                 .build());
 
-        mvc.perform(get("/v1/api/orders/statistics"))
+        mvc.perform(get("/api/v1/order/orders/statistics"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [

@@ -32,7 +32,7 @@ public abstract class WireMockTest {
         );
         registry.add(
                 "application.web-service-product-repository.url",
-                () -> wireMockServer.baseUrl() + "/v1/api/products"
+                () -> wireMockServer.baseUrl() + "/api/v1/order/products"
         );
         WireMock.configureFor(wireMockServer.getPort());
     }

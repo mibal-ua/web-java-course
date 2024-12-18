@@ -20,14 +20,14 @@ class CosmoCatControllerIntegrationTest extends IntegrationTest {
     @Test
     @EnableFeature(COSMO_CAT)
     void getCosmoCats_shouldReturnIfFeatureIsEnabled() throws Exception {
-        mvc.perform(get("/v1/api/cosmo-cats"))
+        mvc.perform(get("/api/v1/order/cosmo-cats"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @DisableFeature(COSMO_CAT)
     void getCosmoCats_shouldThrowIfFeatureIsDisabled() throws Exception {
-        mvc.perform(get("/v1/api/cosmo-cats"))
+        mvc.perform(get("/api/v1/order/cosmo-cats"))
                 .andExpect(status().isNotFound());
     }
 }

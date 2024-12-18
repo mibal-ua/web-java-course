@@ -27,7 +27,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/api/categories")
+@RequestMapping("/api/v1/order/categories")
 public class CategoryController {
     private final CategoryService service;
     private final CategoryDtoMapper mapper;

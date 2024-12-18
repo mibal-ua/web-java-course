@@ -8,11 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 /**
  * @author Mykhailo Balakhon
@@ -22,18 +20,38 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
-    private static final String V1_API_ROOT = "/v1/api/**";
+    private static final String V1_API_ORDERS = "/api/v1/order/**";
+    private static final String V1_API_ROOT = "/api/v1/**";
+    private static final String API_LOGIN = "/login/**";
 
     @Bean
     @Order(1)
-    public SecurityFilterChain filterChainOrdersV1(HttpSecurity http, JwtDecoder decoder) throws Exception {
-        http.securityMatcher(V1_API_ROOT)
+    public SecurityFilterChain filterChainOrdersV1(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher(V1_API_ORDERS)
                 .cors(withDefaults())
                 .csrf(CsrfConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers(antMatcher(V1_API_ROOT)).authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(V1_API_ORDERS).authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(withDefaults())
+                )
+                .build();
+    }
 
+    @Bean
+    @Order(3)
+    public SecurityFilterChain filterChainGreetingV1(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(API_LOGIN).permitAll()
+                        .requestMatchers(V1_API_ROOT).authenticated()
+                )
+                .oauth2Login(withDefaults());
         return http.build();
     }
 }

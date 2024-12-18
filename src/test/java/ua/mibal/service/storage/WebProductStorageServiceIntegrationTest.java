@@ -35,7 +35,7 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
 
     @Test
     void existsByName() {
-        stubFor(WireMock.get("/v1/api/products/exists?name=Space%20milk")
+        stubFor(WireMock.get("/api/v1/order/products/exists?name=Space%20milk")
                 .willReturn(aResponse().withStatus(204)));
 
         assertThat(repository.existsByName("Space milk")).isTrue();
@@ -43,7 +43,7 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
 
     @Test
     void existsByName_shouldReturnFalseIfNotFound() {
-        stubFor(WireMock.get("/v1/api/products/exists?name=Space%20milk")
+        stubFor(WireMock.get("/api/v1/order/products/exists?name=Space%20milk")
                 .willReturn(aResponse().withStatus(404)));
 
         assertThat(repository.existsByName("Space milk")).isFalse();
@@ -51,7 +51,7 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
 
     @Test
     void existsByName_shouldThrowIsServiceException() {
-        stubFor(WireMock.get("/v1/api/products/exists?name=Space%20milk")
+        stubFor(WireMock.get("/api/v1/order/products/exists?name=Space%20milk")
                 .willReturn(aResponse().withStatus(500)));
 
         assertThrows(
@@ -69,7 +69,7 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
                 .price(valueOf(100))
                 .build();
 
-        stubFor(WireMock.get("/v1/api/products/101")
+        stubFor(WireMock.get("/api/v1/order/products/101")
                 .willReturn(aResponse().withStatus(200)
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withBody(json(spaceMilk))));
@@ -85,7 +85,7 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
 
     @Test
     void findById_shouldReturnEmptyIfNotFound() {
-        stubFor(WireMock.get("/v1/api/products/101")
+        stubFor(WireMock.get("/api/v1/order/products/101")
                 .willReturn(aResponse().withStatus(404)));
 
         Optional<Product> actual = repository.findById(101L);
@@ -95,7 +95,7 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
 
     @Test
     void findById_shouldThrowIfServiceException() {
-        stubFor(WireMock.get("/v1/api/products/101")
+        stubFor(WireMock.get("/api/v1/order/products/101")
                 .willReturn(aResponse().withStatus(500)));
 
         assertThrows(
@@ -106,7 +106,7 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
 
     @Test
     void findAll() {
-        stubFor(WireMock.get("/v1/api/products")
+        stubFor(WireMock.get("/api/v1/order/products")
                 .willReturn(aResponse().withStatus(200)
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withBody(json(List.of(
@@ -146,7 +146,7 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
                 .price(valueOf(100))
                 .build();
 
-        stubFor(WireMock.post("/v1/api/products")
+        stubFor(WireMock.post("/api/v1/order/products")
                 .withRequestBody(jsonRequest(form))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -181,7 +181,7 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
                 .price(valueOf(100))
                 .build();
 
-        stubFor(WireMock.put("/v1/api/products/101")
+        stubFor(WireMock.put("/api/v1/order/products/101")
                 .withRequestBody(jsonRequest(form))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -204,12 +204,12 @@ class WebProductStorageServiceIntegrationTest extends WireMockTest {
 
     @Test
     void deleteById() {
-        stubFor(WireMock.delete("/v1/api/products/101")
+        stubFor(WireMock.delete("/api/v1/order/products/101")
                 .willReturn(aResponse().withStatus(204)));
 
         repository.deleteById(101L);
 
-        verify(WireMock.deleteRequestedFor(urlEqualTo("/v1/api/products/101")));
+        verify(WireMock.deleteRequestedFor(urlEqualTo("/api/v1/order/products/101")));
     }
 
     private static ContentPattern<?> jsonRequest(Object object) {

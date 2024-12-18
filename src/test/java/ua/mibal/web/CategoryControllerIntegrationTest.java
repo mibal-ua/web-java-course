@@ -33,7 +33,7 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
                 .name("SPACESHIP")
                 .build());
 
-        mvc.perform(get("/v1/api/categories"))
+        mvc.perform(get("/api/v1/order/categories"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [
@@ -50,7 +50,7 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
                 .name("SPACESHIP")
                 .build());
 
-        mvc.perform(get("/v1/api/categories/SPACESHIP"))
+        mvc.perform(get("/api/v1/order/categories/SPACESHIP"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {
@@ -61,13 +61,13 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
 
     @Test
     void getOne_NotFound() throws Exception {
-        mvc.perform(get("/v1/api/categories/SPACESHIP"))
+        mvc.perform(get("/api/v1/order/categories/SPACESHIP"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void create() throws Exception {
-        mvc.perform(post("/v1/api/categories")
+        mvc.perform(post("/api/v1/order/categories")
                         .contentType("application/json")
                         .content("""
                                 {
@@ -87,7 +87,7 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
                 .name("SPACESHIP")
                 .build());
 
-        mvc.perform(post("/v1/api/categories")
+        mvc.perform(post("/api/v1/order/categories")
                         .contentType("application/json")
                         .content("""
                                 {
@@ -103,7 +103,7 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
                 .name("SPACESHIP")
                 .build());
 
-        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/categories/SPACESHIP"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/categories/SPACESHIP"))
                 .andExpect(status().isNoContent());
 
         verifyDoesNotExist(CategoryEntity.builder()

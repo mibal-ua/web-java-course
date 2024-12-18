@@ -58,7 +58,7 @@ class ProductControllerTest extends ControllerTest {
                 .categories(Set.of(galaxyFood()))
                 .build());
 
-        mvc.perform(get("/v1/api/products"))
+        mvc.perform(get("/api/v1/order/products"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [
@@ -86,7 +86,7 @@ class ProductControllerTest extends ControllerTest {
                 .categories(Set.of(galaxyFood()))
                 .build());
 
-        mvc.perform(get("/v1/api/products/101"))
+        mvc.perform(get("/api/v1/order/products/101"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""  
                         {
@@ -106,7 +106,7 @@ class ProductControllerTest extends ControllerTest {
     void getOne_shouldReturnNotFound() throws Exception {
         givenEmptyService();
 
-        mvc.perform(get("/v1/api/products/101"))
+        mvc.perform(get("/api/v1/order/products/101"))
                 .andExpect(status().isNotFound());
     }
 
@@ -114,7 +114,7 @@ class ProductControllerTest extends ControllerTest {
     void create() throws Exception {
         givenEmptyService();
 
-        mvc.perform(post("/v1/api/products")
+        mvc.perform(post("/api/v1/order/products")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -130,7 +130,7 @@ class ProductControllerTest extends ControllerTest {
     void create_shouldReturnConflictIfNameIsNotUnique() throws Exception {
         givenServiceThatThrowsConflictExceptionOnName("Same space name");
 
-        mvc.perform(post("/v1/api/products")
+        mvc.perform(post("/api/v1/order/products")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -147,7 +147,7 @@ class ProductControllerTest extends ControllerTest {
     void create_shouldReturnBadRequestIfFieldsAreNotValid(ProductForm form) throws Exception {
         givenEmptyService();
 
-        mvc.perform(post("/v1/api/products")
+        mvc.perform(post("/api/v1/order/products")
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(form)))
                 .andExpect(status().isBadRequest());
@@ -170,7 +170,7 @@ class ProductControllerTest extends ControllerTest {
                         .build()
                 );
 
-        mvc.perform(put("/v1/api/products/101")
+        mvc.perform(put("/api/v1/order/products/101")
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(brandNewSpaceMilk)))
                 .andExpect(status().isOk())
@@ -199,7 +199,7 @@ class ProductControllerTest extends ControllerTest {
     void update_shouldReturnBadRequestOnInvalidFormIfExists(ProductForm form) throws Exception {
         given(Product.builder().id(101L).build());
 
-        mvc.perform(put("/v1/api/products/101")
+        mvc.perform(put("/api/v1/order/products/101")
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(form)))
                 .andExpect(status().isBadRequest());
@@ -208,7 +208,7 @@ class ProductControllerTest extends ControllerTest {
     void update_shouldReturnBadRequestOnInvalidFormIfNotExists(ProductForm form) throws Exception {
         givenEmptyService();
 
-        mvc.perform(put("/v1/api/products/101")
+        mvc.perform(put("/api/v1/order/products/101")
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(form)))
                 .andExpect(status().isBadRequest());
@@ -223,7 +223,7 @@ class ProductControllerTest extends ControllerTest {
                 .price(valueOf(100))
                 .build());
 
-        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/101"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/products/101"))
                 .andExpect(status().isNoContent());
     }
 
@@ -231,7 +231,7 @@ class ProductControllerTest extends ControllerTest {
     void delete_shouldNotThrowExceptionEvenIfNotFound() throws Exception {
         givenEmptyService();
 
-        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/101"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/products/101"))
                 .andExpect(status().isNoContent());
     }
 
