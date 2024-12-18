@@ -3,10 +3,10 @@ info:
   title: WEB Java course API documentation
   version: 0.0.1-SNAPSHOT
 servers:
-- url: http://localhost:7070
+- url: http://localhost:7071
   description: Local server
 paths:
-  /v1/api/products/{id}:
+  /api/v1/order/products/{id}:
     get:
       tags:
       - product-controller
@@ -20,18 +20,18 @@ paths:
           type: integer
           format: int64
       responses:
-        "404":
-          description: Product not found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ProblemDetail"
         "200":
           description: Product received
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ProductDto"
+        "404":
+          description: Product not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
     put:
       tags:
       - product-controller
@@ -51,18 +51,18 @@ paths:
               $ref: "#/components/schemas/ProductForm"
         required: true
       responses:
-        "200":
-          description: Product updated or created
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ProductDto"
         "400":
           description: Passed form to update is not valid
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ConstraintViolationProblemDetails"
+        "200":
+          description: Product updated or created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDto"
     delete:
       tags:
       - product-controller
@@ -78,7 +78,7 @@ paths:
       responses:
         "204":
           description: Deleted
-  /v1/api/orders/{id}:
+  /api/v1/order/orders/{id}:
     get:
       tags:
       - order-controller
@@ -135,7 +135,7 @@ paths:
       responses:
         "204":
           description: No Content
-  /v1/api/products:
+  /api/v1/order/products:
     get:
       tags:
       - product-controller
@@ -162,12 +162,6 @@ paths:
               $ref: "#/components/schemas/ProductForm"
         required: true
       responses:
-        "400":
-          description: Passed form to create is not valid
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ConstraintViolationProblemDetails"
         "201":
           description: Product created
           content:
@@ -180,7 +174,13 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ProblemDetail"
-  /v1/api/orders:
+        "400":
+          description: Passed form to create is not valid
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ConstraintViolationProblemDetails"
+  /api/v1/order/orders:
     get:
       tags:
       - order-controller
@@ -211,7 +211,7 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/OrderDto"
-  /v1/api/categories:
+  /api/v1/order/categories:
     get:
       tags:
       - category-controller
@@ -242,7 +242,7 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/CategoryDto"
-  /v1/api/orders/statistics:
+  /api/v1/order/orders/statistics:
     get:
       tags:
       - order-controller
@@ -256,7 +256,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ProductOrderingStatisticsDto"
-  /v1/api/cosmo-cats:
+  /api/v1/order/cosmo-cats:
     get:
       tags:
       - cosmo-cat-controller
@@ -270,7 +270,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CosmoCatDto"
-  /v1/api/categories/{name}:
+  /api/v1/order/categories/{name}:
     get:
       tags:
       - category-controller
@@ -301,6 +301,18 @@ paths:
       responses:
         "204":
           description: No Content
+  /api/v1/greetings:
+    get:
+      tags:
+      - greeting-controller
+      operationId: greet
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
 components:
   schemas:
     ProductForm:

@@ -23,6 +23,7 @@ public class SecurityConfiguration {
     private static final String V1_API_ORDERS = "/api/v1/order/**";
     private static final String V1_API_ROOT = "/api/v1/**";
     private static final String API_LOGIN = "/login/**";
+    private static final String API_OPENAPI = "/v3/**";
 
     @Bean
     @Order(1)
@@ -35,6 +36,7 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(API_OPENAPI).permitAll()
                         .requestMatchers(V1_API_ORDERS).authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
