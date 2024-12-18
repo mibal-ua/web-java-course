@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
@@ -31,7 +30,6 @@ public class SecurityConfiguration {
         http.securityMatcher(V1_API_ROOT)
                 .cors(withDefaults())
                 .csrf(CsrfConfigurer::disable)
-                .addFilterBefore(new CosmicKeyFilter(decoder), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(antMatcher(V1_API_ROOT)).authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
