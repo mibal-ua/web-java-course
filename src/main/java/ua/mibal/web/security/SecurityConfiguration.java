@@ -23,16 +23,17 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
+    private static final String V1_API_ROOT = "/v1/api/**";
 
     @Bean
     @Order(1)
     public SecurityFilterChain filterChainOrdersV1(HttpSecurity http, JwtDecoder decoder) throws Exception {
-        http.securityMatcher("/api/**")
+        http.securityMatcher(V1_API_ROOT)
                 .cors(withDefaults())
                 .csrf(CsrfConfigurer::disable)
                 .addFilterBefore(new CosmicKeyFilter(decoder), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers(antMatcher("/api/**")).authenticated())
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers(antMatcher(V1_API_ROOT)).authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
 
         return http.build();
