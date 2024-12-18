@@ -3,6 +3,7 @@ package ua.mibal.web;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ua.mibal.repository.CategoryRepository;
 import ua.mibal.repository.entity.CategoryEntity;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Mykhailo Balakhon
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
+@WithMockUser
 class CategoryControllerIntegrationTest extends IntegrationTest {
     @Autowired
     private CategoryRepository repository;

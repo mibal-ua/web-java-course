@@ -60,6 +60,7 @@ dependencies {
     testImplementation "org.wiremock:wiremock-jetty12:3.9.2"
     testImplementation 'org.testcontainers:testcontainers'
     testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.springframework.security:spring-security-test'
     runtimeOnly 'org.postgresql:postgresql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
