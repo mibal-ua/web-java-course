@@ -27,6 +27,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -113,10 +114,12 @@ class ProductControllerTest extends ControllerTest {
     }
 
     @Test
+    @WithMockUser
     void create() throws Exception {
         givenEmptyService();
 
         mvc.perform(post("/api/v1/order/products")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -133,6 +136,7 @@ class ProductControllerTest extends ControllerTest {
         givenServiceThatThrowsConflictExceptionOnName("Same space name");
 
         mvc.perform(post("/api/v1/order/products")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -173,6 +177,7 @@ class ProductControllerTest extends ControllerTest {
                 );
 
         mvc.perform(put("/api/v1/order/products/101")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(brandNewSpaceMilk)))
                 .andExpect(status().isOk())
@@ -225,7 +230,8 @@ class ProductControllerTest extends ControllerTest {
                 .price(valueOf(100))
                 .build());
 
-        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/products/101"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/products/101")
+                        .with(csrf()))
                 .andExpect(status().isNoContent());
     }
 
@@ -233,7 +239,8 @@ class ProductControllerTest extends ControllerTest {
     void delete_shouldNotThrowExceptionEvenIfNotFound() throws Exception {
         givenEmptyService();
 
-        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/products/101"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/products/101")
+                        .with(csrf()))
                 .andExpect(status().isNoContent());
     }
 
@@ -261,6 +268,13 @@ class ProductControllerTest extends ControllerTest {
                 .name("Valid space name")
                 .description("Valid space description")
                 .price(valueOf(100));
+    }
+
+    private static Category galaxyFood() {
+        return Category.builder()
+                .id(1L)
+                .name("Galaxy food")
+                .build();
     }
 
     private void givenServiceThatThrowsConflictExceptionOnName(String name) {
@@ -300,12 +314,5 @@ class ProductControllerTest extends ControllerTest {
             when(productService.getOneById(product.getId()))
                     .thenReturn(product);
         }
-    }
-    
-    private static Category galaxyFood() {
-        return Category.builder()
-                .id(1L)
-                .name("Galaxy food")
-                .build();
     }
 }
