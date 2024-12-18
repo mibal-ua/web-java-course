@@ -1,5 +1,6 @@
 package ua.mibal.service;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ua.mibal.domain.CosmoCat;
 import ua.mibal.featureToggle.annotation.FeatureToggle;
@@ -16,6 +17,7 @@ import static ua.mibal.featureToggle.ToggleableFeature.COSMO_CAT;
 public class CosmoCatService {
 
     @FeatureToggle(COSMO_CAT)
+    @PreAuthorize("hasRole('COSMO_ADMIN')")
     public List<CosmoCat> getCosmoCats() {
         return List.of(
                 new CosmoCat("CosmoCat 1", "blue", "soft", "CosmoCat 1 description"),

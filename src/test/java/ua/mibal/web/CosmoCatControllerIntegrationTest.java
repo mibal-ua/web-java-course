@@ -15,7 +15,7 @@ import static ua.mibal.featureToggle.ToggleableFeature.COSMO_CAT;
  * @author Mykhailo Balakhon
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
-@WithMockUser
+@WithMockUser(roles = "COSMO_ADMIN")
 @ExtendWith(FeatureToggleExtension.class)
 class CosmoCatControllerIntegrationTest extends IntegrationTest {
 
@@ -31,6 +31,14 @@ class CosmoCatControllerIntegrationTest extends IntegrationTest {
     void getCosmoCats_shouldThrowIfFeatureIsDisabled() throws Exception {
         mvc.perform(get("/api/v1/order/cosmo-cats"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @EnableFeature(COSMO_CAT)
+    @WithMockUser(roles = "NOT_A_COSMO_ADMIN")
+    void getCosmoCats_shouldReturnForbiddenIfIsNotAnAdmin() throws Exception {
+        mvc.perform(get("/api/v1/order/cosmo-cats"))
+                .andExpect(status().isForbidden());
     }
 }
 

@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,6 +19,7 @@ import ua.mibal.web.dto.ConstraintViolationProblemDetails;
 import static java.net.URI.create;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ProblemDetail.forStatusAndDetail;
@@ -56,9 +58,18 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    ProblemDetail handle(AuthorizationDeniedException e) {
+        log.error("AuthorizationDeniedException caught: " + e.getMessage());
+        ProblemDetail problemDetail = forStatusAndDetail(FORBIDDEN, e.getMessage());
+        problemDetail.setType(create("access-denied"));
+        problemDetail.setTitle(e.getMessage());
+        return problemDetail;
+    }
+
     @ExceptionHandler(Exception.class)
     ProblemDetail handle(Exception e) {
-        log.error("Unknown exception caught: " + e.getMessage());
+        log.error("Unknown exception caught: " + e.getClass() + ": " + e.getMessage());
         ProblemDetail problemDetail = forStatusAndDetail(INTERNAL_SERVER_ERROR, e.getMessage());
         problemDetail.setTitle("Internal Server Error. Contact support");
         return problemDetail;
