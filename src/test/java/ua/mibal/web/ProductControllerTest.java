@@ -218,6 +218,7 @@ class ProductControllerTest extends ControllerTest {
         givenEmptyService();
 
         mvc.perform(put("/api/v1/order/products/101")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(form)))
                 .andExpect(status().isBadRequest());
