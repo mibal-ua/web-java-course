@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ua.mibal.domain.Category;
 import ua.mibal.domain.Product;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -36,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Mykhailo Balakhon
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
+@WithMockUser
 @WebMvcTest(ProductController.class)
 class ProductControllerTest extends ControllerTest {
     @MockBean
@@ -58,7 +61,7 @@ class ProductControllerTest extends ControllerTest {
                 .categories(Set.of(galaxyFood()))
                 .build());
 
-        mvc.perform(get("/v1/api/products"))
+        mvc.perform(get("/api/v1/order/products"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [
@@ -86,7 +89,7 @@ class ProductControllerTest extends ControllerTest {
                 .categories(Set.of(galaxyFood()))
                 .build());
 
-        mvc.perform(get("/v1/api/products/101"))
+        mvc.perform(get("/api/v1/order/products/101"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""  
                         {
@@ -106,15 +109,17 @@ class ProductControllerTest extends ControllerTest {
     void getOne_shouldReturnNotFound() throws Exception {
         givenEmptyService();
 
-        mvc.perform(get("/v1/api/products/101"))
+        mvc.perform(get("/api/v1/order/products/101"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser
     void create() throws Exception {
         givenEmptyService();
 
-        mvc.perform(post("/v1/api/products")
+        mvc.perform(post("/api/v1/order/products")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -130,7 +135,8 @@ class ProductControllerTest extends ControllerTest {
     void create_shouldReturnConflictIfNameIsNotUnique() throws Exception {
         givenServiceThatThrowsConflictExceptionOnName("Same space name");
 
-        mvc.perform(post("/v1/api/products")
+        mvc.perform(post("/api/v1/order/products")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -147,7 +153,8 @@ class ProductControllerTest extends ControllerTest {
     void create_shouldReturnBadRequestIfFieldsAreNotValid(ProductForm form) throws Exception {
         givenEmptyService();
 
-        mvc.perform(post("/v1/api/products")
+        mvc.perform(post("/api/v1/order/products")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(form)))
                 .andExpect(status().isBadRequest());
@@ -170,7 +177,8 @@ class ProductControllerTest extends ControllerTest {
                         .build()
                 );
 
-        mvc.perform(put("/v1/api/products/101")
+        mvc.perform(put("/api/v1/order/products/101")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(brandNewSpaceMilk)))
                 .andExpect(status().isOk())
@@ -199,7 +207,8 @@ class ProductControllerTest extends ControllerTest {
     void update_shouldReturnBadRequestOnInvalidFormIfExists(ProductForm form) throws Exception {
         given(Product.builder().id(101L).build());
 
-        mvc.perform(put("/v1/api/products/101")
+        mvc.perform(put("/api/v1/order/products/101")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(form)))
                 .andExpect(status().isBadRequest());
@@ -208,7 +217,8 @@ class ProductControllerTest extends ControllerTest {
     void update_shouldReturnBadRequestOnInvalidFormIfNotExists(ProductForm form) throws Exception {
         givenEmptyService();
 
-        mvc.perform(put("/v1/api/products/101")
+        mvc.perform(put("/api/v1/order/products/101")
+                        .with(csrf())
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsString(form)))
                 .andExpect(status().isBadRequest());
@@ -223,7 +233,8 @@ class ProductControllerTest extends ControllerTest {
                 .price(valueOf(100))
                 .build());
 
-        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/101"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/products/101")
+                        .with(csrf()))
                 .andExpect(status().isNoContent());
     }
 
@@ -231,7 +242,8 @@ class ProductControllerTest extends ControllerTest {
     void delete_shouldNotThrowExceptionEvenIfNotFound() throws Exception {
         givenEmptyService();
 
-        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/101"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/products/101")
+                        .with(csrf()))
                 .andExpect(status().isNoContent());
     }
 
@@ -259,6 +271,13 @@ class ProductControllerTest extends ControllerTest {
                 .name("Valid space name")
                 .description("Valid space description")
                 .price(valueOf(100));
+    }
+
+    private static Category galaxyFood() {
+        return Category.builder()
+                .id(1L)
+                .name("Galaxy food")
+                .build();
     }
 
     private void givenServiceThatThrowsConflictExceptionOnName(String name) {
@@ -298,12 +317,5 @@ class ProductControllerTest extends ControllerTest {
             when(productService.getOneById(product.getId()))
                     .thenReturn(product);
         }
-    }
-    
-    private static Category galaxyFood() {
-        return Category.builder()
-                .id(1L)
-                .name("Galaxy food")
-                .build();
     }
 }

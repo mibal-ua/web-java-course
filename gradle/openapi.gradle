@@ -1,5 +1,5 @@
 openApi {
-    apiDocsUrl.set("http://localhost:7070/v3/api-docs.yaml")
+    apiDocsUrl.set("http://localhost:7071/v3/api-docs.yaml")
     outputDir.set(file("${rootProject.projectDir}/src/main/resources/api-specs"))
     outputFileName.set("openapi.yml")
 }

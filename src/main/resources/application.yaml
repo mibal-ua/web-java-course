@@ -1,5 +1,9 @@
+logging:
+  level:
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web.client: DEBUG
 server:
-  port: 7070
+  port: 7071
 spring:
   application:
     name: web-java-course
@@ -12,12 +16,30 @@ spring:
     enabled: true
   jpa:
     hibernate.ddl-auto: validate
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jws-algorithms: RS256 # default actually
+          jwk-set-uri: http://localhost:8083/.well-known/jwks.json
+      client:
+        registration:
+          github:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+            scope: user:email
+            redirect-uri: http://localhost:7071/login/oauth2/code/github
+            authorization-grant-type: authorization_code
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
 application:
   rest-client:
     response-timeout: 1000
   web-service-product-repository:
-    url: http://localhost:7071/v1/api/products
+    url: http://localhost:7071/api/v1/order/products
 feature:
   cosmoCats:
     enabled: true

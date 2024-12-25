@@ -3,6 +3,7 @@ package ua.mibal.web;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ua.mibal.repository.CategoryRepository;
 import ua.mibal.repository.entity.CategoryEntity;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Mykhailo Balakhon
  * @link <a href="mailto:mykhailo.balakhon@communify.us">mykhailo.balakhon@communify.us</a>
  */
+@WithMockUser
 class CategoryControllerIntegrationTest extends IntegrationTest {
     @Autowired
     private CategoryRepository repository;
@@ -33,7 +35,7 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
                 .name("SPACESHIP")
                 .build());
 
-        mvc.perform(get("/v1/api/categories"))
+        mvc.perform(get("/api/v1/order/categories"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [
@@ -50,7 +52,7 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
                 .name("SPACESHIP")
                 .build());
 
-        mvc.perform(get("/v1/api/categories/SPACESHIP"))
+        mvc.perform(get("/api/v1/order/categories/SPACESHIP"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {
@@ -61,13 +63,13 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
 
     @Test
     void getOne_NotFound() throws Exception {
-        mvc.perform(get("/v1/api/categories/SPACESHIP"))
+        mvc.perform(get("/api/v1/order/categories/SPACESHIP"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void create() throws Exception {
-        mvc.perform(post("/v1/api/categories")
+        mvc.perform(post("/api/v1/order/categories")
                         .contentType("application/json")
                         .content("""
                                 {
@@ -87,7 +89,7 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
                 .name("SPACESHIP")
                 .build());
 
-        mvc.perform(post("/v1/api/categories")
+        mvc.perform(post("/api/v1/order/categories")
                         .contentType("application/json")
                         .content("""
                                 {
@@ -103,7 +105,7 @@ class CategoryControllerIntegrationTest extends IntegrationTest {
                 .name("SPACESHIP")
                 .build());
 
-        mvc.perform(MockMvcRequestBuilders.delete("/v1/api/categories/SPACESHIP"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/categories/SPACESHIP"))
                 .andExpect(status().isNoContent());
 
         verifyDoesNotExist(CategoryEntity.builder()

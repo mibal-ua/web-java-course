@@ -29,7 +29,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/api/products")
+@RequestMapping("/api/v1/order/products")
 public class ProductController implements ProductControllerDocumentation {
     private final ProductService service;
     private final ProductDtoMapper mapper;
